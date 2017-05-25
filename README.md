@@ -14,3 +14,5 @@ This is our initial database sketch.
 ## History
 
 * 23-05-2017: Inital commit.
+
+* 25-05-2017: Initial sketch of the website's main page and registration/email verification
