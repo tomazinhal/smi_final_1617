@@ -10,7 +10,9 @@
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 </style>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
-
+<?php
+  session_start();
+?>
 
 
 <!-- Sidebar/menu -->
@@ -63,12 +65,25 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
         <a href="#" class="w3-bar-item w3-button">Option 3</a>
       </div>
     </div>
-    <button onclick="document.getElementById('registerModal').style.display='block'" style="margin-top:1%" class="w3-button w3-right">Register</button>
-    <button onclick="document.getElementById('loginModal').style.display='block'" style="margin-top:1%" class="w3-button w3-right">Log In</button>
+
+    <?php
+      if(empty($_SESSION["userId"])){
+        echo '<button onclick="document.getElementById(\'registerModal\').style.display=\'block\'" 
+                        style="margin-top:1%" class="w3-button w3-right">Register</button>
+              <button onclick="document.getElementById(\'loginModal\').style.display=\'block\'" 
+                        style="margin-top:1%" class="w3-button w3-right">Log In</button>';
+      }
+      else{
+        echo '<a href="logout.php" style="margin-top:1%" class="w3-a w3-right">Test</button>';
+      }
+    ?>
+    
   </header>
   
   <?php
     //pick 15 events from the database and put them here
+    print_r($_SESSION);
+
     $numEventRows = 3;
 
     for($i = 0; $i < $numEventRows; $i++){
@@ -123,7 +138,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
       <form class="w3-container" action="registerUser.php" nsubmit="return FormLoginValidator(this)" name="FormLogin" method="post">
         <div class="w3-section">
           <label><b>Username</b></label>
-          <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Username" name="name" required>
+          <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Username" name="username" required>
           <label><b>Email</b></label>
           <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Email" name="email" required>
           <label><b>Password</b></label>
@@ -148,10 +163,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
         <span onclick="document.getElementById('loginModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
       </div>
 
-      <form class="w3-container" action="" nsubmit="return FormLoginValidator(this)" name="FormLogin" method="post">
+      <form class="w3-container" action="login.php" nsubmit="return FormLoginValidator(this)" name="FormLogin" method="post">
         <div class="w3-section">
           <label><b>Username</b></label>
-          <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Username" name="name" required>
+          <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Username" name="username" required>
           <label><b>Password</b></label>
           <input class="w3-input w3-animate-input" style="width:50%" type="password" placeholder="Enter Password" name="password" required>
           <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
@@ -167,9 +182,6 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     </div>
 </div>
 
-<script>
-  
-</script>
 
 </body>
 </html>
