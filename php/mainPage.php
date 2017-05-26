@@ -68,10 +68,8 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
     <?php
       if(empty($_SESSION["userId"])){
-        echo '<button onclick="document.getElementById(\'registerModal\').style.display=\'block\'" 
-                        style="margin-top:1%" class="w3-button w3-right">Register</button>
-              <button onclick="document.getElementById(\'loginModal\').style.display=\'block\'" 
-                        style="margin-top:1%" class="w3-button w3-right">Log In</button>';
+        echo '<a href="registerFrame.php" style="margin-top:1%" class="w3-button w3-right">Register</a>
+              <a href="loginFrame.php" style="margin-top:1%" class="w3-button w3-right">Log In</a>';
       }
       else{
         echo '<a href="logout.php" style="margin-top:1%" class="w3-a w3-right">Test</button>';
@@ -120,68 +118,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     }
   ?>
 
-  <!-- Pagination -->
+  <!-- Show More -->
   <div class="w3-center w3-padding-32">
     <button class="w3-button w3-white we-card">Show more!</button>
   </div>
 
 <!-- End page content -->
 </div>
-
-<!-- Register Modal -->
-<div id="registerModal" class="w3-modal">
-    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:300px">
-      <div class="w3-center"><br>
-        <span onclick="document.getElementById('registerModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-      </div>
-
-      <form class="w3-container" action="registerUser.php" nsubmit="return FormLoginValidator(this)" name="FormLogin" method="post">
-        <div class="w3-section">
-          <label><b>Username</b></label>
-          <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Username" name="username" required>
-          <label><b>Email</b></label>
-          <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Email" name="email" required>
-          <label><b>Password</b></label>
-          <input class="w3-input w3-animate-input" style="width:50%" type="password" placeholder="Enter Password" name="password" required>
-          
-          <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Register</button>
-          
-        </div>
-      </form>
-      <button onclick="document.getElementById('registerModal').style.display='none';
-            document.getElementById('loginModal').style.display='block'" class="w3-button w3-margin-top">Login</button>
-      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-        <button onclick="document.getElementById('registerModal').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
-      </div>
-    </div>
-</div>
-
-<!-- Login Modal -->
-<div id="loginModal" class="w3-modal">
-    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:300px">
-      <div class="w3-center"><br>
-        <span onclick="document.getElementById('loginModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-      </div>
-
-      <form class="w3-container" action="login.php" nsubmit="return FormLoginValidator(this)" name="FormLogin" method="post">
-        <div class="w3-section">
-          <label><b>Username</b></label>
-          <input class="w3-input w3-margin-bottom w3-animate-input" style="width:50%" type="text" placeholder="Enter Username" name="username" required>
-          <label><b>Password</b></label>
-          <input class="w3-input w3-animate-input" style="width:50%" type="password" placeholder="Enter Password" name="password" required>
-          <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
-          
-        </div>
-      </form>
-      <button onclick="document.getElementById('loginModal').style.display='none'; 
-            document.getElementById('registerModal').style.display='block'" class="w3-button w3-margin-top">Register</button>
-      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-        <button onclick="document.getElementById('loginModal').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
-        <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
-      </div>
-    </div>
-</div>
-
 
 </body>
 </html>
