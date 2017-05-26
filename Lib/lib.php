@@ -80,9 +80,17 @@ function webAppName() {
     return $webApp;
 }
 
-function isValid($userName, $password, $authType) {
-    $userOk = -1;
-    $linkIdentifier = mysql_connect("localhost:3306", "root", "");      //TODO replace localhost with nameSpace
+function isLoggedIn(){
+    if (!empty($_SESSION['userId'])){
+        return $_SESSION['userId'];
+      }
+    else{
+         return "-1";
+      }
+}
+
+function isValid($userName, $password) {
+    $linkIdentifier = mysqli_connect("localhost:3306", "root", "");      //TODO replace localhost with nameSpace
     mysqli_select_db($linkIdentifier, "smi_final");
 
     $query = "SELECT * FROM `smi_final`.`user` WHERE `name`='$userName' AND `password`='$password' AND `role`!='0'";
@@ -96,7 +104,7 @@ function isValid($userName, $password, $authType) {
     }
     mysqli_free_result($result);
 
-    mysql_Close($linkIdentifier);
+    mysqli_Close($linkIdentifier);
 
     return $userOk;
 }
@@ -104,7 +112,7 @@ function isValid($userName, $password, $authType) {
 function getRole($userId) {
     $userRoles = "";
 
-    $linkIdentifier = mysql_connect("localhost:3306", "root", "");      //TODO replace localhost with nameSpace
+    $linkIdentifier = mysqli_connect("localhost:3306", "root", "");      //TODO replace localhost with nameSpace
     mysqli_select_db($linkIdentifier, "smi_final");
 
     $query = "SELECT `role` FROM `smi_final`.`user` WHERE `id` = '$userId'";
@@ -112,7 +120,7 @@ function getRole($userId) {
     $result = mysqli_query($linkIdentifier, $query);
     $userRoles = mysqli_fetch_array($result);
     mysqli_free_result($result);
-    mysql_close($linkIdentifier);
+    mysqli_close($linkIdentifier);
 
     return $userRoles;
 }
