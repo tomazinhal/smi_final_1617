@@ -16,9 +16,13 @@
     $newbase="/mainPage.php";
     $baseNextUrl = $baseUrl . $name . $newbase;
 
-    $id = isValid($_POST["username"], $_POST["password"]);
-
-    session_start();
-    $_SESSION["userId"] = $id;
-    header("location:mainPage.php");
+    if(isValid($_POST["username"], $_POST["password"]) != null){
+        $id = isValid($_POST["username"], $_POST["password"]);
+        session_start();
+        $_SESSION["userId"] = $id;
+        header("location:mainPage.php");    
+    }
+    else{
+        header("location:loginFrame.php");
+    }
 ?>
