@@ -98,14 +98,12 @@ function isValid($userName, $password) {
 
     $numRows = mysqli_num_rows($result);
 
-    if ($numRows > 0) {
+    if ($numRows == 1) {
         $userData = mysqli_fetch_array($result);
         $userOk = $userData['id'];
     }
     mysqli_free_result($result);
-
     mysqli_Close($linkIdentifier);
-
     return $userOk;
 }
 
