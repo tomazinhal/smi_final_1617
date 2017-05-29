@@ -20,9 +20,13 @@
         $id = isValid($_POST["username"], $_POST["password"]);
         session_start();
         $_SESSION["userId"] = $id;
-        header("location:mainPage.php");    
+        $newbase="/mainPage.php";
+        $baseNextUrl = $baseUrl . $name . $newbase;
+        header($baseNextUrl);    
     }
     else{
+        $newbase="/loginFrame.php";
+        $baseNextUrl = $baseUrl . $name . $newbase;
         header("location:loginFrame.php");
     }
 ?>
