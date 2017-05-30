@@ -15,7 +15,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
   <br><br><br>
-  <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</a> 
+  <button onclick="document.getElementById('newEventModal').style.display='block'; w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button> 
   <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i>ABOUT</a> 
   <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>CONTACT</a>
 </nav>
@@ -40,6 +40,50 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       }
     ?>
     </header>
+
+<div class="w3-modal"  style="display:none" id="newEventModal">
+  <?php
+    if(!empty($_SESSION["userId"])){
+        echo '<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">';
+        echo '    <div class="w3-center"><br>';
+        echo '        <span onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '    </div>';
+        echo '    <form class="w3-container" action="createEvent.php" nsubmit="return FormLoginValidator(this)" name="eventLogin" method="post">';
+        echo '        <div class="w3-section">';
+        echo '            <label><b>Event Name</b></label>';
+        echo '            <input class="w3-input w3-margin-bottom w3-animate-input" id="eventName" style="width:50%" type="text" placeholder="Enter a name" name="eventName" required>';
+        echo '            <label><b>Type of Event</b></label>';
+        echo '            <select class="w3-select" name="type" required>';
+        echo '                <option value="" disabled selected>Choose a type</option>';
+        echo '                <option value="1">Party</option>';
+        echo '                <option value="2">Exhibition</option>';
+        echo '                <option value="3">Art</option>';
+        echo '            </select><br><br>';
+        echo '            <label><b>Event description</b></label><br><br>';
+        echo '            <textarea rows="4" cols="50" name="description" required></textarea>';
+        echo '            <input type=\'hidden\' name=\'userId\' value=\'<?php echo $_SESSION["userId"];?>\'/> ';
+        echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Make Event</button>    ';
+        echo '        </div>';
+        echo '    </form>';
+        echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
+        echo '        <button onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" type="button" class="w3-button w3-red">Cancel</button>';
+        echo '    </div>';
+        echo '</div>';
+    }
+    else{
+        echo ' <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:400px">';
+        echo '    <div class="w3-center"><br>';
+        echo '        <span onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '    </div>';
+        echo '    <label><b>You have to an account to create new events</b></label>';
+        echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
+        echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</button>';
+        echo '        <a onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-red">Cancel</button>';
+        echo '    </div>';
+        echo '</div>';
+    }
+  ?>
+</div>
 
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
@@ -90,6 +134,15 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </div>
 
 <script>
+
+  function newEventModal_close(){
+    document.getElementById("newEventModal").style.display = "none";
+  }
+
+  function newEventModal_open(){
+    document.getElementById("newEventModal").style.display = "block";
+  }
+
 // Script to open and close sidebar
 function w3_open() {
     document.getElementById("mySidebar").style.display = "block";
