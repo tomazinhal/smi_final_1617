@@ -6,9 +6,8 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
-</style>
+<style> body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif} </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 <?php session_start(); ?>
 
@@ -56,57 +55,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     
   </header>
 
-  <?php
-    //pick 3 events from the database and put them here
-    print_r($_SESSION);
-    $_SESSION["numEvents"] = 0;
-    include_once("getTwelveEvents.php");
+<div class="w3-container w3-margin-top" id="eventsDiv"></div>
 
-    if(isset($_SESSION["events"])){
-      $events = $_SESSION["events"];
-      $numEvents = sizeof($events);
-      $numRows = floor(3 / $numEvents);
-      $lastNumCols = $numEvents % 3;
-
-      
-      echo "<br>" . $numEvents;
-      echo "<br>" . $numRows;
-      echo "<br>" . $lastNumCols;
-      /*
-      for($i = 0; $i < $numEventRows; $i++){
-        $event1 = 3*$i + 1;
-        $event2 = 3*$i + 2;
-        $event3 = 3*$i + 3;
-
-        echo '  <div class=" w3-container w3-margin-top">
-                  <!-- First Photo Grid (will later be done dynamically) -->
-                  <div class="w3-row-padding w3-animate-zoom">
-                    <div class="w3-third   w3-container w3-margin-bottom">
-                      <img src="" alt="Event' . $event1 . '" style="width:100%" class="w3-hover-opacity">
-                      <div class="w3-container w3-white">
-                        <p><b>Lorem Ipsum</b></p>
-                        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-                      </div>
-                    </div>
-                    <div class="w3-third w3-container w3-margin-bottom">
-                      <img src="" alt="Event' . $event2 . '" style="width:100%" class="w3-hover-opacity">
-                      <div class="w3-container w3-white">
-                        <p><b>Lorem Ipsum</b></p>
-                        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-                      </div>
-                    </div>
-                    <div class="w3-third w3-container">
-                      <img src="" alt="Event' . $event3 . '" style="width:100%" class="w3-hover-opacity">
-                      <div class="w3-container w3-white">
-                        <p><b>Lorem Ipsum</b></p>
-                        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>';
-      }*/
-    }
-  ?>
+<script>
+  $(document).ready(function(){
+    $("#btnShowMore").click();
+  });
+</script>
 
 <div class="w3-modal"  style="display:none" id="newEventModal">
   <?php
@@ -151,16 +106,17 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     }
   ?>
 </div>
-
   <!-- Show More -->
   <div class="w3-center w3-padding-32">
-    <button class="w3-button w3-white we-card">Show more!</button>
+    <button class="w3-button w3-white we-card" id="btnShowMore">Show more!</button>
   </div>
 
 <!-- End page content -->
 </div>
 
 <script>
+  
+  
   function newEventModal_close(){
     document.getElementById("newEventModal").style.display = "none";
   }
@@ -178,6 +134,87 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
       document.getElementById("mySidebar").style.display = "none";
       document.getElementById("myOverlay").style.display = "none";
   }
+
+
+  var jsGlobal = (function () {   //Method to get a global variable not being global yet able to be seen by others
+        var numEvents = 0; // Private Variable
+
+        var pub = {};// public object - returned at end of module
+
+        pub.setNumEvents = function (numEvents_) {
+            numEvents = numEvents_;
+        };
+
+        pub.getNumEvents = function() {
+            return numEvents;
+        }
+
+        return pub; // expose externally
+    }());
+
+  
+    $("#btnShowMore").click(function(){   //method to get up to 9 more events and update the page with ajax  
+      $.ajax({        //post communication to getNineEvents.php
+        type: "post",
+        url: "getNineEvents.php",
+        data: { "numEvents": jsGlobal.getNumEvents()},
+        dataType: 'json',
+        success: function (events) {
+          jsGlobal.setNumEvents(jsGlobal.getNumEvents() + events.length);
+          var numRows = Math.ceil(events.length / 3);
+          var lastLineEvents = events.length % 3;
+          var eventNum = 0;
+          var content = "";
+          for(var i = 0; i < numRows; i++){ //
+            
+            content += '<div class="w3-row-padding w3-animate-zoom">';
+            if(i == (numRows - 1) && lastLineEvents != 0){   //check necessary to handle the last line since it can have less 
+              for(var j = 0; j < lastLineEvents; j++){                               //than 3 events
+                content += '\
+                <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
+                  <div class="w3-third   w3-container w3-margin-bottom">\
+                    <img src="" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                    <div class="w3-container w3-white">\
+                      <p><b>' + events[eventNum][1] + '</b></p>\
+                      <p>' + events[eventNum][2] + '</p>\
+                    </div>\
+                  </div>\
+                  </a>';
+                  eventNum++;
+              }
+            }
+            else{
+              for(var j = 0; j < 3; j++){
+                content += '\
+                <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
+                <div class="w3-third   w3-container w3-margin-bottom">\
+                  <img src="" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                  <div class="w3-container w3-white">\
+                    <p><b>' + events[eventNum][1] + '</b></p>\
+                    <p>' + events[eventNum][2] + '</p>\
+                  </div>\
+                </div>\
+                </a>';
+                eventNum++;
+              }
+            }
+            content += '</div>';
+            
+            if(events.length % 9 != 0)
+              $("#btnShowMore").attr("disabled", true); //disable button to get more events since there's no more events to show
+          }
+          $("#eventsDiv").append(content);    //update on the div with all the events it got from getNineEvents.php
+        },
+        error: function(xhr) {
+          alert('fail')
+        }
+    })
+    return false;
+    });
+
+
+
+
 </script>
 
 </body>
