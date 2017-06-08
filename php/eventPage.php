@@ -11,6 +11,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 .w3-quarter img:hover{opacity: 0.6; transition: 0.3s}
 </style>
 <body class="w3-light-grey">
+<?php session_start(); ?>
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
@@ -25,12 +26,15 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
     
-    <form style="display:inline-block; vertical-align:middle; margin-left:100px" action="/action_page.php">
-      Upload content: <input type="file" name="content" accept="image/*,video/*" multiple>
+    <form style="display:inline-block; vertical-align:middle; margin-left:100px" enctype="multipart/form-data" action="sendFile.php" method="POST">
+      Upload content: <input type="file" name="content[]" accept="image/*,video/*" multiple>
+      <input type="hidden" name="eventId" value="<?php echo $_GET["eventId"]?>" />
+      <input type="hidden" name="userId" value="<?php echo $_SESSION["userId"]?>" />
+      
       <input type="submit" value="Upload">
     </form>
+
     <?php
-      session_start();
       if(empty($_SESSION["userId"])){
         echo '<a href="registerFrame.php" style="margin-top:1%" class="w3-button w3-right">Register</a>
               <a href="loginFrame.php" style="margin-top:1%" class="w3-button w3-right">Log In</a>';
@@ -77,8 +81,8 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         echo '    </div>';
         echo '    <label><b>You have to an account to create new events</b></label>';
         echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
-        echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</button>';
-        echo '        <a onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-red">Cancel</button>';
+        echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</a>';
+        echo '        <a onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-red">Cancel</a>';
         echo '    </div>';
         echo '</div>';
     }
