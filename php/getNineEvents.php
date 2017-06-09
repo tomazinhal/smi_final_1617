@@ -10,10 +10,6 @@
     $serverName = $_SERVER['SERVER_NAME'];
 
     $serverPort = 80;
-    
-    $baseUrl = "http://" . $serverName . ":" . $serverPort;
-    $newbase="/mainPage.php";
-    $baseNextUrl = $baseUrl . $name . $newbase;
     $events = array();
     if(isset($_POST["numEvents"])){
 
