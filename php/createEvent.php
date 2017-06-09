@@ -11,22 +11,29 @@
     $serverName = $_SERVER['SERVER_NAME'];
 
     $serverPort = 80;
+    print_r($_FILES);
+    $thumbnail = $_FILES["thumbnail"];
+    $type = explode( '/', $thumbnail["type"] )[0];
+    print_r($type);
+    if($type == "image"){
+        $query = "INSERT INTO `event`(`name`, `description`, `type`, `thumbnail`) VALUES
+                                ('" . $_POST["eventName"] . "','" . $_POST["description"] . "'," . 
+                                $_POST["type"] . ", '')";
 
-    $query = "INSERT INTO `event`(`name`, `description`, `type`) VALUES
-                             ('" . $_POST["eventName"] . "','" . $_POST["description"] . "'," . 
-                             $_POST["type"] . ")";
+        mysqli_query($linkIdentifier, $query);
+        $eventId = mysqli_insert_id($linkIdentifier);
 
-    mysqli_query($linkIdentifier, $query);
+        $query = "SELECT max(id) FROM `post`";
+        $result = mysqli_query($linkIdentifier, $query);
+        $lastId = mysqli_fetch_array($result);
+        $lastId = $lastId[0] + 1;
+        $thumbnail = $_FILES["thumbnail"];
+        $directory = "Content/" . $lastId . ".png";
+        imagepng(imagecreatefromstring(file_get_contents($thumbnail["tmp_name"])), "../" . $directory);
 
-    $query = "SELECT `id` FROM `event` WHERE `name`='" . $_POST["eventName"] . "'";
-    $result = mysqli_query($linkIdentifier, $query);
-
-    $numRows = mysqli_num_rows($result);
-
-    if ($numRows == 1) {
-        $userData = mysqli_fetch_array($result);
-        $eventId = $userData['id'];
-        printf($eventId);
+        $query = "UPDATE `event` SET `thumbnail`='" . $directory . "' WHERE `id` = " . $eventId;
+        mysqli_query($linkIdentifier, $query);
+        
         mysqli_free_result($result);
         mysqli_Close($linkIdentifier);
 
@@ -35,6 +42,9 @@
         $baseNextUrl = $baseUrl . $name . $newbase;
 
         header("location:" . $baseNextUrl);
+    }
+    else{
+        header("location:eventFailed.php");
     }
     
 ?>
