@@ -241,7 +241,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
             if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
               content += '\
                 <div class="w3-quarter">\
-                  <img src="' + scr + '" alt="Event" style="width:100%" class="cont_hover">\
+                  <img src="' + scr + '" alt="post" style="width:100%" class="cont_hover">\
                 </div>\
                 </a>';
               postNum++;
@@ -249,7 +249,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
             else{
               content += '\
                 <div class="w3-quarter">\
-                  <video src="' + scr + '" alt="Event" style="width:100%" class="cont_hover" controls>\
+                  <video src="' + scr + '" alt="psot" style="width:100%" class="cont_hover" controls>\
                 </div>\
                 </a>';
               postNum++;
@@ -262,7 +262,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
             if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
               content += '\
                 <div class="w3-quarter">\
-                  <img src="' + scr + '" alt="Event" style="width:100%" class="cont_hover">\
+                  <img src="' + scr + '" alt="post" style="width:100%" class="cont_hover">\
                 </div>\
                 </a>';
               postNum++;
@@ -270,7 +270,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
             else{
               content += '\
                 <div class="w3-quarter">\
-                  <video src="' + scr + '" alt="Event" style="width:100%" class="cont_hover" controls>\
+                  <video src="' + scr + '" alt="post" style="width:100%" class="cont_hover" controls>\
                 </div>\
                 </a>';
               postNum++;
@@ -298,6 +298,7 @@ $(document).ready(function(){
     data: { "eventId": <?php echo $_GET["eventId"];?>},
     dataType: 'json',
     success: function (event) {
+      var scr = './../../' + event["thumbnail"];
       var content = '\
       <div class="w3-container" style="height:100%">\
           <div class="w3-twothird">\
@@ -305,7 +306,7 @@ $(document).ready(function(){
               <p>' + event[2] + '</p>\
           </div>\
           <div class="w3-third" style="height:100%; display:flex; justify-content:center; align-items: center" >\
-            <img src="./../../Content/52.png" style="height:100%"></img>\
+            <img src="' + scr + '" style="height:100%"></img>\
           </div>\
       </div>';
         
