@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS event
     name VARCHAR(30) NOT NULL UNIQUE,
     description VARCHAR(500) DEFAULT 'This event has no description.',
     type INT NOT NULL,
+    thumbnail VARCHAR(100) NOT NULL,
     creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 );
