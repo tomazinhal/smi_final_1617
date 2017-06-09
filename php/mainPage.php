@@ -70,7 +70,7 @@
         echo '    <div class="w3-center"><br>';
         echo '        <span onclick=newEventModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
         echo '    </div>';
-        echo '    <form class="w3-container" action="createEvent.php" nsubmit="return FormLoginValidator(this)" name="eventLogin" method="post">';
+        echo '    <form class="w3-container" action="createEvent.php" enctype="multipart/form-data"  nsubmit="return FormLoginValidator(this)" name="eventLogin" method="post">';
         echo '        <div class="w3-section">';
         echo '            <label><b>Event Name</b></label>';
         echo '            <input class="w3-input w3-margin-bottom w3-animate-input" id="eventName" style="width:50%" type="text" placeholder="Enter a name" name="eventName" required>';
@@ -82,8 +82,9 @@
         echo '                <option value="3">Art</option>';
         echo '            </select><br><br>';
         echo '            <label><b>Event description</b></label><br><br>';
-        echo '            <textarea rows="4" cols="50" name="description" required></textarea>';
+        echo '            <textarea rows="4" cols="50" name="description" required></textarea><br>';
         echo '            <input type=\'hidden\' name=\'userId\' value=\'<?php echo $_SESSION["userId"];?>\'/> ';
+        echo '            Upload thumbnail: <input type="file" name="thumbnail" accept="image/*" required>';
         echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Make Event</button>    ';
         echo '        </div>';
         echo '    </form>';
@@ -175,7 +176,7 @@
                 content += '\
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                   <div class="w3-third   w3-container w3-margin-bottom">\
-                    <img src="" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                    <img src="./../../' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
                     <div class="w3-container w3-white">\
                       <p><b>' + events[eventNum][1] + '</b></p>\
                       <p>' + events[eventNum][2] + '</p>\
@@ -190,7 +191,7 @@
                 content += '\
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                 <div class="w3-third   w3-container w3-margin-bottom">\
-                  <img src="" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                  <img src="./../../' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
                   <div class="w3-container w3-white">\
                     <p><b>' + events[eventNum][1] + '</b></p>\
                     <p>' + events[eventNum][2] + '</p>\
