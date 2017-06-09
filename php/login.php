@@ -13,8 +13,6 @@
     $serverPort = 80;
     
     $baseUrl = "http://" . $serverName . ":" . $serverPort;
-    $newbase="/mainPage.php";
-    $baseNextUrl = $baseUrl . $name . $newbase;
 
     if(isValid($_POST["username"], $_POST["password"]) != null){
         $id = isValid($_POST["username"], $_POST["password"]);
@@ -22,11 +20,13 @@
         $_SESSION["userId"] = $id;
         $newbase="/mainPage.php";
         $baseNextUrl = $baseUrl . $name . $newbase;
-        header($baseNextUrl);    
+        header("Location:".$baseNextUrl); 
+        //redirectToLastPage("", 0);   
     }
     else{
         $newbase="/loginFrame.php";
         $baseNextUrl = $baseUrl . $name . $newbase;
-        header("location:loginFrame.php");
+        header("Location:".$baseNextUrl);
+        //redirectToLastPage("", 0);  
     }
 ?>
