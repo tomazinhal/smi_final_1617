@@ -14,7 +14,7 @@
 <!-- Side menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
   <br><br><br>
-  <button onclick="document.getElementById('newEventModal').style.display='block'; w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button> 
+  <button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button> 
   <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i>ABOUT</a> 
   <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>CONTACT</a>
 </nav>
@@ -68,7 +68,7 @@
     if(!empty($_SESSION["userId"])){
         echo '<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">';
         echo '    <div class="w3-center"><br>';
-        echo '        <span onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '        <span onclick=newEventModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
         echo '    </div>';
         echo '    <form class="w3-container" action="createEvent.php" nsubmit="return FormLoginValidator(this)" name="eventLogin" method="post">';
         echo '        <div class="w3-section">';
@@ -88,28 +88,29 @@
         echo '        </div>';
         echo '    </form>';
         echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
-        echo '        <button onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" type="button" class="w3-button w3-red">Cancel</button>';
+        echo '        <button onclick=newEventModal_close() type="button" class="w3-button w3-red">Cancel</button>';
         echo '    </div>';
         echo '</div>';
     }
     else{
         echo ' <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:400px">';
         echo '    <div class="w3-center"><br>';
-        echo '        <span onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '        <span onclick=newEventModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
         echo '    </div>';
         echo '    <label><b>You have to an account to create new events</b></label>';
         echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
         echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</button>';
-        echo '        <a onclick="document.getElementById(\'newEventModal\').style.display=\'none\'" class="w3-button w3-red">Cancel</button>';
+        echo '        <a onclick=newEventModal_close() class="w3-button w3-red">Cancel</a>';
         echo '    </div>';
         echo '</div>';
     }
   ?>
 </div>
-  <!-- Show More -->
-  <div class="w3-center w3-padding-32">
-    <button class="w3-button w3-white we-card" id="btnShowMore">Show more!</button>
-  </div>
+
+<!-- Show More -->
+<div class="w3-center w3-padding-32">
+  <button class="w3-button w3-white we-card" id="btnShowMore">Show more!</button>
+</div>
 
 <!-- End page content -->
 </div>
@@ -159,6 +160,7 @@
         url: "getNineEvents.php",
         data: { "numEvents": jsGlobal.getNumEvents()},
         dataType: 'json',
+
         success: function (events) {
           jsGlobal.setNumEvents(jsGlobal.getNumEvents() + events.length);
           var numRows = Math.ceil(events.length / 3);
