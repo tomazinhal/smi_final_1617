@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS event
     name VARCHAR(30) NOT NULL UNIQUE,
     description VARCHAR(500) DEFAULT 'This event has no description.',
     type INT NOT NULL,
-    creation DATE NOT NULL,
+    thumbnail VARCHAR(100) NOT NULL,
+    creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 );
 
@@ -40,8 +41,8 @@ CREATE TABLE IF NOT EXISTS post
     id INT NOT NULL UNIQUE AUTO_INCREMENT,
     user_id INT NOT NULL,
     event_id INT NOT NULL,
-    content BLOB NOT NULL,
-    creation DATE NOT NULL,
+    content VARCHAR(100) NOT NULL,
+    creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 );
 
@@ -66,7 +67,7 @@ ALTER TABLE user
     ADD    FOREIGN KEY (role)
     REFERENCES role(id)
 ;
-    
+
 
 # Create Indexes
 
