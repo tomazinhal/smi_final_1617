@@ -107,7 +107,7 @@
 </div>
 
 <!-- Show More -->
-<div class="w3-center w3-padding-32">
+<div class="w3-center w3-padding-32 w3-animate-zoom">
   <button class="w3-button w3-white we-card" id="btnShowMore">Show more!</button>
 </div>
 

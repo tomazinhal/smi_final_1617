@@ -164,7 +164,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <!-- !PAGE CONTENT! -->
 <div class="w3-main w3-content" style="max-width:1600px">
   
-  <div class="w3-container w3-border-bottom " style="height:200px" id="eventInfo"></div>
+  <div class="w3-container w3-border-bottom w3-animate-zoom" style="height:200px" id="eventInfo"></div>
 
   <!-- Photo grid -->
   <div class="w3-row w3-grayscale-min" id="postsDiv">
@@ -172,7 +172,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </div>
 
   <div class="w3-center w3-padding-32">
-    <button class="w3-button w3-white we-card" id="btnShowMore">Show more!</button>
+    <button class="w3-button w3-white we-card w3-animate-zoom" id="btnShowMore">Show more!</button>
   </div>
 <!-- End page content -->
 </div>
