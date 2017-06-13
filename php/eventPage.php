@@ -35,16 +35,34 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     transform: scale(1);
 }
 </style>
-<body class="w3-light-grey">
-<?php session_start(); ?>
+<body class="w3-light-grey" style="line-height:1">
+<?php 
+  session_start(); 
+  $_SESSION["eventId"] = $_GET["eventId"];
+?>
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
   <br><br><br>
   <button onclick=newEventModal_open(); w3_close() class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button> 
-  <button onclick=contentModal_open(); w3_close() class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Post new content</button> 
-  <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i>ABOUT</a> 
-  <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>CONTACT</a>
+  <button onclick=contentModal_open(); w3_close() class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Post new content</button>
+  <?php
+  if(!empty($_SESSION["userId"])){
+    
+    ob_start();
+    include("isSubscribed.php");
+    $isSubed = ob_get_contents();
+    ob_end_clean();
+
+    if($isSubed == "TRUE"){
+      echo '<a href="unsubscribe.php" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Unsubscribe</a>';
+    }
+    else{
+      echo '<a href="subscribe.php" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Subscribe</a>';
+    }
+  }
+  ?>
+   
 </nav>
 
 <!-- Header -->
@@ -52,13 +70,13 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
     
-
     <?php
       if(empty($_SESSION["userId"])){
         echo '<a href="registerFrame.php" style="margin-top:1%" class="w3-button w3-right">Register</a>
               <a href="loginFrame.php" style="margin-top:1%" class="w3-button w3-right">Log In</a>';
       }
       else{
+        echo '<button style="margin-top:1%" class="w3-button w3-right">Log out></button>';
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
       }
     ?>
@@ -83,8 +101,9 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         echo '                <option value="3">Art</option>';
         echo '            </select><br><br>';
         echo '            <label><b>Event description</b></label><br><br>';
-        echo '            <textarea rows="4" cols="50" name="description" required></textarea>';
-        echo '            <input type=\'hidden\' name=\'userId\' value=\'<?php echo $_SESSION["userId"];?>\'/> ';
+        echo '            <textarea rows="4" cols="50" name="description" required></textarea><br>';
+        echo '            <input type=\'hidden\' name=\'userId\' value=\'<?php echo $_SESSION["userId"];?> \'/> ';
+        echo '            Upload thumbnail: <input type="file" name="thumbnail" accept="image/*" required>';
         echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Make Event</button>    ';
         echo '        </div>';
         echo '    </form>';
@@ -117,7 +136,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         echo '    </div>';
         echo '    <form style="display:inline-block; vertical-align:middle; margin-left:100px" enctype="multipart/form-data" action="sendFile.php" method="POST">';
         echo '           Upload content: <input type="file" name="content[]" accept="image/*,video/*" multiple>';
-        echo '           <input type="hidden" name="eventId" value="' . $_GET["eventId"] . '" />';
+        echo '           <input type="hidden" name="eventId" value="' . $_SESSION["eventId"] . '" />';
         echo '           <input type="hidden" name="userId" value="' . $_SESSION["userId"] . '" />';           
         echo '           <input type="submit" value="Upload">';
         echo '    </form>';
@@ -191,14 +210,6 @@ function w3_close() {
     document.getElementById("myOverlay").style.display = "none";
 }
 
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
-}
-
 var jsGlobal = (function () {   //Method to get a global variable not being global yet able to be seen by others
     var numPosts = 0; // Private Variable
 
@@ -220,7 +231,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
   $.ajax({        //post communication to getNineposts.php
     type: "post",
     url: "getTwelvePosts.php",
-    data: { "numPosts": jsGlobal.getNumPosts(), "eventId": <?php echo $_GET["eventId"];?>},
+    data: { "numPosts": jsGlobal.getNumPosts(), "eventId": <?php echo $_SESSION["eventId"];?>},
     dataType: 'json',
 
     success: function (posts) {
@@ -295,18 +306,18 @@ $(document).ready(function(){
   $.ajax({ 
     type: "post",
     url: "getInfoEvent.php",
-    data: { "eventId": <?php echo $_GET["eventId"];?>},
+    data: { "eventId": <?php echo $_SESSION["eventId"];?>},
     dataType: 'json',
     success: function (event) {
       var scr = './../../' + event["thumbnail"];
       var content = '\
-      <div class="w3-container" style="height:100%">\
+      <div style="height:100%">\
           <div class="w3-twothird">\
               <h3>' + event[1] + '</h3>\
               <p>' + event[2] + '</p>\
           </div>\
-          <div class="w3-third" style="height:100%; display:flex; justify-content:center; align-items: center" >\
-            <img src="' + scr + '" style="height:100%"></img>\
+          <div class="w3-third" style="height:100%; justify-content:center;">\
+            <img src="' + scr + '" style="height:100%"/>\
           </div>\
       </div>';
         
