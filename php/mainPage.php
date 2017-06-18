@@ -9,7 +9,7 @@
 <style> body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif} </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
-<?php session_start(); ?>
+<?php session_start();?>
 
 <!-- Side menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
@@ -82,7 +82,7 @@
         echo '            <label><b>Event description</b></label><br><br>';
         echo '            <textarea rows="4" cols="50" name="description" required></textarea><br>';
         echo '            <input type=\'hidden\' name=\'userId\' value=\'<?php echo $_SESSION["userId"];?>\'/> ';
-        echo '            Upload thumbnail: <input type="file" name="thumbnail" accept="image/*" required>';
+        echo '            Upload thumbnail: <input type="file" name="content[]" accept="image/*" required>';
         echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Make Event</button>    ';
         echo '        </div>';
         echo '    </form>';
@@ -174,8 +174,8 @@
                 content += '\
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                   <div class="w3-third   w3-container w3-margin-bottom">\
-                    <img src="./../../' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
-                    <!--<img src="/smiProject/' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
+                    <!--<img src="./../../' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
+                    <img src="/smiProject/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
                     <div class="w3-container w3-white">\
                       <p><b>' + events[eventNum][1] + '</b></p>\
                       <p>' + events[eventNum][2] + '</p>\
@@ -190,8 +190,8 @@
                 content += '\
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                 <div class="w3-third   w3-container w3-margin-bottom">\
-                  <img src="./../../' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
-                  <!--<img src="/smiProject/' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
+                  <!--<img src="./../../' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
+                  <img src="/smiProject/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
                   <div class="w3-container w3-white">\
                     <p><b>' + events[eventNum][1] + '</b></p>\
                     <p>' + events[eventNum][2] + '</p>\

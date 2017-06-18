@@ -5,42 +5,24 @@
     mysqli_select_db($linkIdentifier, "smi_final");
     
     $name = webAppName();
-    
     $method = $_SERVER['REQUEST_METHOD'];
-
     $serverName = $_SERVER['SERVER_NAME'];
-
     $serverPort = 80;
-    print_r($_FILES);
-    $thumbnail = $_FILES["thumbnail"];
-    $type = explode( '/', $thumbnail["type"] )[0];
-    print_r($type);
+    
+    $thumbnail = $_FILES["content"];
+    $type = explode( '/', $thumbnail["type"][0])[0];
     if($type == "image"){
-        $query = "INSERT INTO `event`(`name`, `description`, `type`, `thumbnail`) VALUES
-                                ('" . $_POST["eventName"] . "','" . $_POST["description"] . "'," . 
-                                $_POST["type"] . ", '')";
 
-        mysqli_query($linkIdentifier, $query);
-        $eventId = mysqli_insert_id($linkIdentifier);
+        include_once("sendFile.php");    
 
-        $query = "SELECT max(id) FROM `post`";
-        $result = mysqli_query($linkIdentifier, $query);
-        $lastId = mysqli_fetch_array($result);
-        $lastId = $lastId[0] + 1;
-        $thumbnail = $_FILES["thumbnail"];
-        $directory = "Content/" . $lastId . ".png";
-        imagepng(imagecreatefromstring(file_get_contents($thumbnail["tmp_name"])), "../" . $directory);
-
-        $query = "UPDATE `event` SET `thumbnail`='" . $directory . "' WHERE `id` = " . $eventId;
+        $query = "INSERT INTO `event` (`name`, `description`, `type`, `content_id`) VALUES ('" . $_POST["eventName"] . "','" . $_POST["description"] . "'," . $_POST["type"]  ."," . $ids[0] . ")";
         mysqli_query($linkIdentifier, $query);
         
-        mysqli_free_result($result);
-        mysqli_Close($linkIdentifier);
-
+        $eventId = mysqli_insert_id($linkIdentifier);
+        
         $baseUrl = "http://" . $serverName . ":" . $serverPort;
         $newbase="eventPage.php?eventId=" . $eventId;
         $baseNextUrl = $baseUrl . $name . $newbase;
-
         header("location:" . $baseNextUrl);
     }
     else{

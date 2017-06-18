@@ -49,12 +49,9 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <?php
   if(!empty($_SESSION["userId"])){
     
-    ob_start();
-    include("isSubscribed.php");
-    $isSubed = ob_get_contents();
-    ob_end_clean();
+    include_once("isSubscribed.php");
 
-    if($isSubed == "TRUE"){
+    if($isSubed){
       echo '<a href="unsubscribe.php" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Unsubscribe</a>';
     }
     else{
@@ -103,7 +100,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         echo '            <label><b>Event description</b></label><br><br>';
         echo '            <textarea rows="4" cols="50" name="description" required></textarea><br>';
         echo '            <input type=\'hidden\' name=\'userId\' value=\'<?php echo $_SESSION["userId"];?> \'/> ';
-        echo '            Upload thumbnail: <input type="file" name="thumbnail" accept="image/*" required>';
+        echo '            Upload thumbnail: <input type="file" name="content[]" accept="image/*" required>';
         echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Make Event</button>    ';
         echo '        </div>';
         echo '    </form>';
@@ -134,7 +131,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         echo '    <div class="w3-center"><br>';
         echo '        <span onclick=newEventModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
         echo '    </div>';
-        echo '    <form style="display:inline-block; vertical-align:middle; margin-left:100px" enctype="multipart/form-data" action="sendFile.php" method="POST">';
+        echo '    <form style="display:inline-block; vertical-align:middle; margin-left:100px" enctype="multipart/form-data" action="createPost.php" method="POST">';
         echo '           Upload content: <input type="file" name="content[]" accept="image/*,video/*" multiple>';
         echo '           <input type="hidden" name="eventId" value="' . $_SESSION["eventId"] . '" />';
         echo '           <input type="hidden" name="userId" value="' . $_SESSION["userId"] . '" />';           
@@ -247,8 +244,8 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
         content += '<div class="w3-row-padding w3-animate-zoom">';
         if(i == (numRows - 1) && lastLinePosts != 0){   //check necessary to handle the last line since it can have less 
           for(var j = 0; j < lastLinePosts; j++){                               //than 4 posts
-            var scr = './../../' + posts[postNum][0];
-            //var scr = '/smiProject/' + posts[postNum][0];
+            //var scr = './../../' + posts[postNum][0];
+            var scr = '/smiProject/' + posts[postNum][0];
             if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
               content += '\
                 <div class="w3-quarter">\
@@ -269,8 +266,8 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
         }
         else{
           for(var j = 0; j < 4; j++){
-            var scr = './../../' + event["thumbnail"];
-            //var scr = '/smiProject/' + posts[postNum][0];
+            //var scr = './../../' + event["thumbnail"];
+            var scr = '/smiProject/' + posts[postNum][0];
             if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
               content += '\
                 <div class="w3-quarter">\
@@ -310,8 +307,8 @@ $(document).ready(function(){
     data: { "eventId": <?php echo $_SESSION["eventId"];?>},
     dataType: 'json',
     success: function (event) {
-      var scr = './../../' + event["thumbnail"];
-      //var scr = '/smiProject/' + event["thumbnail"];
+      //var scr = './../../' + event["url"];
+      var scr = '/smiProject/' + event["url"];
       var content = '\
       <div style="height:100%">\
           <div class="w3-twothird">\

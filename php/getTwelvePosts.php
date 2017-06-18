@@ -4,8 +4,7 @@
 
     $posts = array();
     if(isset($_POST["eventId"])){
-
-        $query = "SELECT `content` FROM `smi_final`.`post` WHERE `event_id`= " . $_POST['eventId'] . " LIMIT 12 OFFSET " . $_POST['numPosts'];
+        $query = "SELECT `url` FROM `event` INNER JOIN `post` ON `post`.`event_id` = `event`.`id` INNER JOIN `content` ON `post`.`content_id` = `content`.`id` WHERE `post`.`event_id` = " . $_POST["eventId"] . " LIMIT 9 OFFSET " . $_POST["numPosts"];
         $result = mysqli_query($linkIdentifier, $query);
         while ($eventData = mysqli_fetch_array($result)) {
             $posts[] = $eventData;
