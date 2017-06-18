@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS user
 
 CREATE TABLE IF NOT EXISTS role
 (
-    id TINYINT NOT NULL UNIQUE AUTO_INCREMENT,
+    id TINYINT NOT NULL UNIQUE,
     name VARCHAR(30) NOT NULL UNIQUE,
     PRIMARY KEY(id)
 );
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS event
 
 CREATE TABLE IF NOT EXISTS type
 (
-    id TINYINT NOT NULL UNIQUE AUTO_INCREMENT,
+    id TINYINT NOT NULL UNIQUE,
     name VARCHAR(30) NOT NULL UNIQUE,
     PRIMARY KEY(id)
 );
@@ -48,9 +48,10 @@ CREATE TABLE IF NOT EXISTS post
 
 CREATE TABLE IF NOT EXISTS subscription
 (
-    user_id INTEGER NOT NULL,
-    event_id INTEGER NOT NULL,
-    notification BOOLEAN NOT NULL
+    user_id INT NOT NULL REFERENCES user(id),
+    event_id INT NOT NULL REFERENCES event(id),
+    notification BOOLEAN NOT NULL,
+    PRIMARY KEY(user_id, event_id)
 );
 
 CREATE TABLE IF NOT EXISTS content
@@ -80,13 +81,6 @@ ALTER TABLE event
 ALTER TABLE user
     ADD    FOREIGN KEY (role)
     REFERENCES role(id)
-;
-
-ALTER TABLE subscription
-    ADD FOREIGN KEY (user_id)
-    REFERENCES user(id),
-    ADD FOREIGN KEY (event_id)
-    REFERENCES event(id)
 ;
 
 ALTER TABLE event
