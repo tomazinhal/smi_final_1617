@@ -100,7 +100,8 @@ function isValid($userName, $password) {
 
     if ($numRows == 1) {
         $userData = mysqli_fetch_array($result);
-        $userOk = $userData['id'];
+        $userOk["id"] = $userData['id'];
+        $userOk["username"] = $userData['name'];
     }
     mysqli_free_result($result);
     mysqli_Close($linkIdentifier);

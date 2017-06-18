@@ -15,9 +15,10 @@
     $baseUrl = "http://" . $serverName . ":" . $serverPort;
 
     if(isValid($_POST["username"], $_POST["password"]) != null){
-        $id = isValid($_POST["username"], $_POST["password"]);
+        $userData = isValid($_POST["username"], $_POST["password"]);
         session_start();
-        $_SESSION["userId"] = $id;
+        $_SESSION["userId"] = $userData["id"];
+        $_SESSION["username"] = $userData["username"];
         $newbase="/mainPage.php";
         $baseNextUrl = $baseUrl . $name . $newbase;
         header("Location:".$baseNextUrl); 

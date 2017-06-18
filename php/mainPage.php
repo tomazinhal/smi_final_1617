@@ -98,7 +98,7 @@
         echo '    </div>';
         echo '    <label><b>You have to an account to create new events</b></label>';
         echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
-        echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</button>';
+        echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</a>';
         echo '        <a onclick=newEventModal_close() class="w3-button w3-red">Cancel</a>';
         echo '    </div>';
         echo '</div>';
@@ -175,6 +175,7 @@
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                   <div class="w3-third   w3-container w3-margin-bottom">\
                     <img src="./../../' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                    <!--<img src="/smiProject/' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
                     <div class="w3-container w3-white">\
                       <p><b>' + events[eventNum][1] + '</b></p>\
                       <p>' + events[eventNum][2] + '</p>\
@@ -190,6 +191,7 @@
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                 <div class="w3-third   w3-container w3-margin-bottom">\
                   <img src="./../../' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                  <!--<img src="/smiProject/' + events[eventNum]["thumbnail"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
                   <div class="w3-container w3-white">\
                     <p><b>' + events[eventNum][1] + '</b></p>\
                     <p>' + events[eventNum][2] + '</p>\

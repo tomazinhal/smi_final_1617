@@ -29,8 +29,8 @@
 
     $refreshtime = 5;
 
-    if (isset($args['name'])) {
-        $name = $args['name'];
+    if (isset($args['username'])) {
+        $name = $args['username'];
     } else {
         $name = null;
     }
