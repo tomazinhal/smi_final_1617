@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS event
     name VARCHAR(30) NOT NULL UNIQUE,
     description VARCHAR(500) DEFAULT 'This event has no description.',
     type INT NOT NULL,
-    thumbnail VARCHAR(100) NOT NULL,
+    content_id INT NOT NULL,
     creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 );
@@ -41,8 +41,22 @@ CREATE TABLE IF NOT EXISTS post
     id INT NOT NULL UNIQUE AUTO_INCREMENT,
     user_id INT NOT NULL,
     event_id INT NOT NULL,
-    content VARCHAR(100) NOT NULL,
+    content_id INT NOT NULL,
     creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS subscription
+(
+    user_id INTEGER NOT NULL,
+    event_id INTEGER NOT NULL,
+    notification BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS content
+(
+    id INT NOT NULL UNIQUE AUTO_INCREMENT,
+    url VARCHAR(100) NOT NULL,
     PRIMARY KEY(id)
 );
 
@@ -68,6 +82,22 @@ ALTER TABLE user
     REFERENCES role(id)
 ;
 
+ALTER TABLE subscription
+    ADD FOREIGN KEY (user_id)
+    REFERENCES user(id),
+    ADD FOREIGN KEY (event_id)
+    REFERENCES event(id)
+;
+
+ALTER TABLE event
+    ADD FOREIGN KEY (content_id)
+    REFERENCES content(id)
+;
+
+ALTER TABLE post
+    ADD FOREIGN KEY (content_id)
+    REFERENCES content(id)
+;
 
 # Create Indexes
 
