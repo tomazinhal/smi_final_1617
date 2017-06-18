@@ -63,3 +63,5 @@ This is our initial database sketch.
 * 23-05-2017: Inital commit.
 
 * 25-05-2017: Initial sketch of the website's main page and registration/email verification
+
+* 18-06-2017: Database update to hold notification requirements. Login, Logout, Events, Posting all implemented. 
