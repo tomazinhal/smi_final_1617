@@ -76,7 +76,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
               <a href="loginFrame.php" style="margin-top:1%" class="w3-button w3-right">Log In</a>';
       }
       else{
-        echo '<button style="margin-top:1%" class="w3-button w3-right">Log out></button>';
+        echo '<button style="margin-top:1%" class="w3-button w3-right">' . $_SESSION["username"] . '</button>';
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
       }
     ?>
@@ -165,7 +165,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <div class="w3-main w3-content" style="max-width:1600px">
   
   <div class="w3-container w3-border-bottom w3-animate-zoom" style="height:200px" id="eventInfo"></div>
-
+  
   <!-- Photo grid -->
   <div class="w3-row w3-grayscale-min" id="postsDiv">
     
@@ -248,7 +248,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
         if(i == (numRows - 1) && lastLinePosts != 0){   //check necessary to handle the last line since it can have less 
           for(var j = 0; j < lastLinePosts; j++){                               //than 4 posts
             var scr = './../../' + posts[postNum][0];
-            
+            //var scr = '/smiProject/' + posts[postNum][0];
             if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
               content += '\
                 <div class="w3-quarter">\
@@ -269,7 +269,8 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
         }
         else{
           for(var j = 0; j < 4; j++){
-            var scr = './../../' + posts[postNum][0];
+            var scr = './../../' + event["thumbnail"];
+            //var scr = '/smiProject/' + posts[postNum][0];
             if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
               content += '\
                 <div class="w3-quarter">\
@@ -310,6 +311,7 @@ $(document).ready(function(){
     dataType: 'json',
     success: function (event) {
       var scr = './../../' + event["thumbnail"];
+      //var scr = '/smiProject/' + event["thumbnail"];
       var content = '\
       <div style="height:100%">\
           <div class="w3-twothird">\
