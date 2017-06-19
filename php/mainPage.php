@@ -15,6 +15,33 @@
   }
 ?>
 
+<script>
+  jsGlobal = (function () {   //Method to get a global variable not being global yet able to be seen by others
+      var numEvents = 0; // Private Variable
+      var eventType = -1;
+
+      var pub = {};// public object - returned at end of module
+
+      pub.setNumEvents = function (numEvents_) {
+          numEvents = numEvents_;
+      };
+
+      pub.getNumEvents = function() {
+          return numEvents;
+      }
+
+      pub.setEventType = function (eventType_) {
+          eventType = eventType_;
+      };
+
+      pub.getEventType = function() {
+          return eventType;
+      }
+
+      return pub; // expose externally
+  }());
+</script>
+
 <!-- Side menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
   <br><br><br>
@@ -32,14 +59,14 @@
     <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
     <span  style="margin-left:10%">Category:</span> 
-    <button class="w3-button w3-white we-card">ALL</button>
-    <button class="w3-button w3-white we-card">Party</button>
-    <button class="w3-button w3-white we-card">Exhibition</button>
-    <button class="w3-button w3-white we-card">Art</button>
+    <button class="w3-button w3-white we-card" id="typeAll">ALL</button>
+    <button class="w3-button w3-white we-card" id="typeParty">Party</button>
+    <button class="w3-button w3-white we-card" id="typeExhibition">Exhibition</button>
+    <button class="w3-button w3-white we-card" id="typeArt">Art</button>
     <div class="w3-dropdown-hover">
       <button class="w3-button w3-white we-card">Show More Categories</button>
       <div class="w3-dropdown-content w3-bar-block w3-border">
-        <a href="#" class="w3-bar-item w3-button">Option 1</a>
+        <a href="#" class="w3-bar-item w3-button" id="typeFestival">Festival</a>
         <a href="#" class="w3-bar-item w3-button">Option 2</a>
         <a href="#" class="w3-bar-item w3-button">Option 3</a>
       </div>
@@ -89,6 +116,7 @@
 
 <script>
   $(document).ready(function(){
+    jsGlobal.setEventType(-1);
     $("#btnShowMore").click();
   });
 </script>
@@ -174,65 +202,60 @@
       document.getElementById("myOverlay").style.display = "none";
   }
 
+    $("#typeAll").click(function(){
+       $("#eventsDiv").empty();
+      jsGlobal.setEventType(-1);
+       getEvent();
+    })
+    $("#typeArt").click(function(){
+       $("#eventsDiv").empty();
+      jsGlobal.setEventType(3);
+       getEvent();
+    })
+    $("#typeExhibition").click(function(){
+       $("#eventsDiv").empty();
+      jsGlobal.setEventType(2);
+       getEvent();
+    })
+    $("#typeParty").click(function(){
+       $("#eventsDiv").empty();
+       jsGlobal.setEventType(1);
+       getEvent();
+    })
+    $("#typeFestival").click(function(){
+       $("#eventsDiv").empty();
+       jsGlobal.setEventType(4);
+       getEvent();
+    })
 
-  var jsGlobal = (function () {   //Method to get a global variable not being global yet able to be seen by others
-        var numEvents = 0; // Private Variable
+    $("#btnShowMore").click(getEvent);
 
-        var pub = {};// public object - returned at end of module
+  var getEvent = (function(){   //method to get up to 9 more events and update the page with ajax  
+    $.ajax({        //post communication to getNineEvents.php
+      type: "post",
+      url: "getNineEvents.php",
+      data: { "numEvents": jsGlobal.getNumEvents(), 
+              "eventType": jsGlobal.getEventType()},
+      dataType: 'json',
 
-        pub.setNumEvents = function (numEvents_) {
-            numEvents = numEvents_;
-        };
-
-        pub.getNumEvents = function() {
-            return numEvents;
+      success: function (events) {
+        jsGlobal.setNumEvents(jsGlobal.getNumEvents() + events.length);
+        if(events.length == 0){  
+          $("#btnShowMore").attr("disabled", true);
         }
+        else{
 
-        return pub; // expose externally
-    }());
-
-  
-    $("#btnShowMore").click(function(){   //method to get up to 9 more events and update the page with ajax  
-      $.ajax({        //post communication to getNineEvents.php
-        type: "post",
-        url: "getNineEvents.php",
-        data: { "numEvents": jsGlobal.getNumEvents()},
-        dataType: 'json',
-
-        success: function (events) {
-          jsGlobal.setNumEvents(jsGlobal.getNumEvents() + events.length);
-          if(events.length == 0){  
-            $("#btnShowMore").attr("disabled", true);
-          }
-          else{
-
-            var numRows = Math.ceil(events.length / 3);
-            var lastLineEvents = events.length % 3;
-            var eventNum = 0;
-            var content = "";
-            for(var i = 0; i < numRows; i++){ //
-              
-              content += '<div class="w3-row-padding w3-animate-zoom">';
-              if(i == (numRows - 1) && lastLineEvents != 0){   //check necessary to handle the last line since it can have less 
-                for(var j = 0; j < lastLineEvents; j++){                               //than 3 events
-                  content += '\
-                  <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
-                    <div class="w3-third   w3-container w3-margin-bottom">\
-                      <!--<img src="./../../' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
-                      <img src="/smiProject/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
-                      <div class="w3-container w3-white">\
-                        <p><b>' + events[eventNum][1] + '</b></p>\
-                        <p>' + events[eventNum][2] + '</p>\
-                      </div>\
-                    </div>\
-                    </a>';
-                    eventNum++;
-                }
-              }
-              else{
-                for(var j = 0; j < 3; j++){
-                  content += '\
-                  <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
+          var numRows = Math.ceil(events.length / 3);
+          var lastLineEvents = events.length % 3;
+          var eventNum = 0;
+          var content = "";
+          for(var i = 0; i < numRows; i++){ //
+            
+            content += '<div class="w3-row-padding w3-animate-zoom">';
+            if(i == (numRows - 1) && lastLineEvents != 0){   //check necessary to handle the last line since it can have less 
+              for(var j = 0; j < lastLineEvents; j++){                               //than 3 events
+                content += '\
+                <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                   <div class="w3-third   w3-container w3-margin-bottom">\
                     <!--<img src="./../../' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
                     <img src="/smiProject/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
@@ -243,25 +266,38 @@
                   </div>\
                   </a>';
                   eventNum++;
-                }
               }
-              content += '</div>';
-
-              if(events.length % 9 != 0)
-                $("#btnShowMore").attr("disabled", true); //disable button to get more events since there's no more events to show
             }
-            $("#eventsDiv").append(content);    //update on the div with all the events it got from getNineEvents.php
+            else{
+              for(var j = 0; j < 3; j++){
+                content += '\
+                <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
+                <div class="w3-third   w3-container w3-margin-bottom">\
+                  <!--<img src="./../../' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
+                  <img src="/smiProject/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                  <div class="w3-container w3-white">\
+                    <p><b>' + events[eventNum][1] + '</b></p>\
+                    <p>' + events[eventNum][2] + '</p>\
+                  </div>\
+                </div>\
+                </a>';
+                eventNum++;
+              }
+            }
+            content += '</div>';
+
+            if(events.length % 9 != 0)
+              $("#btnShowMore").attr("disabled", true); //disable button to get more events since there's no more events to show
           }
-        },
-        error: function(xhr) {
-          alert('fail')
+          $("#eventsDiv").append(content);    //update on the div with all the events it got from getNineEvents.php
         }
-    })
-    return false;
-    });
-
-
-
+      },
+      error: function(xhr) {
+        alert('fail')
+      }
+  })
+  return false;
+  });
 
 </script>
 
