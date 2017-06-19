@@ -30,7 +30,8 @@
         }
     }
     if($flagNewContent){
-        $query = "UPDATE `subscription` SET `notification` = 1 WHERE `event_id` = " . $_POST['eventId'];
+        $query = "UPDATE `subscription` SET `notification` = 1 WHERE `event_id` = " . $_POST['eventId'] . " AND `user_id` != " . $_POST["userId"];
+        print_r($query);
         mysqli_query($linkIdentifier, $query);
     }
     header("location:eventPage.php?eventId=" . $_POST["eventId"]);

@@ -35,10 +35,13 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     transform: scale(1);
 }
 </style>
-<body class="w3-light-grey" style="line-height:1">
+<body class="w3-light-grey w3-content" style="max-width:1600px">
 <?php 
   session_start(); 
   $_SESSION["eventId"] = $_GET["eventId"];
+  if(isset($_SESSION["userId"])){
+    include_once("getNotifications.php");
+  }
 ?>
 
 <!-- Sidebar/menu -->
@@ -73,8 +76,35 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
               <a href="loginFrame.php" style="margin-top:1%" class="w3-button w3-right">Log In</a>';
       }
       else{
-        echo '<button style="margin-top:1%" class="w3-button w3-right">' . $_SESSION["username"] . '</button>';
+        echo '<div class="w3-right" style="margin-top:1%">';
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
+
+        echo '<button id="notificationButton" onclick="notification_open()" class="w3-right w3-button w3-circle w3-ripple" style="margin-top:1.3%; margin-right:20px; background-color:transparent">';
+        echo '<img alt="notification" src="/smiProject/Content/static/notification_icon.png" width="30" height="30">';
+        echo '</button>';
+
+        echo '<div id="notificationMenu" style="position: absolute; right:1px; top:74px; background-color:#fff; box-shadow: 0 5px 10px rgba(0,0,0,.2);';
+        echo '                      width:320px; border:1px solid #ccc; z-index:12; display:none">';
+        echo '  <div style="height:30px; border-bottom: 1px solid #ddd"><h3 style="text-align:center; line-height:20px">Notifications</h3></div>';
+        echo '    <div id="notificationContent" style="height:400px">';
+        
+        if(count($notifications) == 0){
+          echo '  <p>You don\'t have any notifications</p>';
+        }
+        else{
+          echo '      <ul class="w3-ul w3-hoverable">';
+          for($i = 0; $i < count($notifications); $i++){
+            echo '<li style="padding: 0px; display:block">';
+            echo '  <a style="display:flex; margin-left:10px; text-decoration:none" href="removeNotification.php?eventId=' . $notifications[$i][0] . '">';
+            echo '    <p><b>'. $notifications[$i][1] . '</b> has new posts!</p>';
+            echo '  </a>';
+            echo '</li>';
+          }
+          echo '      </ul>';
+        }
+        echo '    </div>';
+        echo '  </div>';
+        echo '</div>';
       }
     ?>
     </header>
@@ -180,6 +210,16 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     $("#btnShowMore").click();
   });
 
+  function notification_open(){
+    document.getElementById("notificationMenu").style.display = "block";
+    document.getElementById("notificationButton").onclick = function(){ notification_close();};
+  }
+  
+  function notification_close(){
+    document.getElementById("notificationMenu").style.display = "none";
+    document.getElementById("notificationButton").onclick = function(){ notification_open();};
+  }
+  
   function newEventModal_close(){
     document.getElementById("newEventModal").style.display = "none";
   }
@@ -233,65 +273,69 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
 
     success: function (posts) {
       jsGlobal.setNumPosts(jsGlobal.getNumPosts() + posts.length);
-      $("#postsDiv").append(content);
-      var numRows = Math.ceil(posts.length / 4);
-      var lastLinePosts = posts.length % 4;
-      var postNum = 0;
-      var content = "";
-      
-      for(var i = 0; i < numRows; i++){ //
-        
-        content += '<div class="w3-row-padding w3-animate-zoom">';
-        if(i == (numRows - 1) && lastLinePosts != 0){   //check necessary to handle the last line since it can have less 
-          for(var j = 0; j < lastLinePosts; j++){                               //than 4 posts
-            //var scr = './../../' + posts[postNum][0];
-            var scr = '/smiProject/' + posts[postNum][0];
-            if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
-              content += '\
-                <div class="w3-quarter">\
-                  <img src="' + scr + '" alt="post" style="width:100%" class="cont_hover">\
-                </div>\
-                </a>';
-              postNum++;
-            }
-            else{
-              content += '\
-                <div class="w3-quarter">\
-                  <video src="' + scr + '" alt="psot" style="width:100%" class="cont_hover" controls>\
-                </div>\
-                </a>';
-              postNum++;
-            }
-          }
-        }
-        else{
-          for(var j = 0; j < 4; j++){
-            //var scr = './../../' + event["thumbnail"];
-            var scr = '/smiProject/' + posts[postNum][0];
-            if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
-              content += '\
-                <div class="w3-quarter">\
-                  <img src="' + scr + '" alt="post" style="width:100%" class="cont_hover">\
-                </div>\
-                </a>';
-              postNum++;
-            }
-            else{
-              content += '\
-                <div class="w3-quarter">\
-                  <video src="' + scr + '" alt="post" style="width:100%" class="cont_hover" controls>\
-                </div>\
-                </a>';
-              postNum++;
-            }
-          }
-        }
-        content += '</div>';
-        
-        if(posts.length % 12 != 0)
-          $("#btnShowMore").attr("disabled", true); //disable button to get more posts since there's no more posts to show
+      if(posts.length == 0){
+        $("#btnShowMore").attr("disabled", true);
       }
-      $("#postsDiv").append(content);    //update on the div with all the posts it got from getNineposts.php
+      else{
+        var numRows = Math.ceil(posts.length / 4);
+        var lastLinePosts = posts.length % 4;
+        var postNum = 0;
+        var content = "";
+        
+        for(var i = 0; i < numRows; i++){ //
+          
+          content += '<div class="w3-row-padding w3-animate-zoom">';
+          if(i == (numRows - 1) && lastLinePosts != 0){   //check necessary to handle the last line since it can have less 
+            for(var j = 0; j < lastLinePosts; j++){                               //than 4 posts
+              //var scr = './../../' + posts[postNum][0];
+              var scr = '/smiProject/' + posts[postNum][0];
+              if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
+                content += '\
+                  <div class="w3-quarter">\
+                    <img src="' + scr + '" alt="post" style="width:100%" class="cont_hover">\
+                  </div>\
+                  </a>';
+                postNum++;
+              }
+              else{
+                content += '\
+                  <div class="w3-quarter">\
+                    <video src="' + scr + '" alt="psot" style="width:100%" class="cont_hover" controls>\
+                  </div>\
+                  </a>';
+                postNum++;
+              }
+            }
+          }
+          else{
+            for(var j = 0; j < 4; j++){
+              //var scr = './../../' + event["thumbnail"];
+              var scr = '/smiProject/' + posts[postNum][0];
+              if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
+                content += '\
+                  <div class="w3-quarter">\
+                    <img src="' + scr + '" alt="post" style="width:100%" class="cont_hover">\
+                  </div>\
+                  </a>';
+                postNum++;
+              }
+              else{
+                content += '\
+                  <div class="w3-quarter">\
+                    <video src="' + scr + '" alt="post" style="width:100%" class="cont_hover" controls>\
+                  </div>\
+                  </a>';
+                postNum++;
+              }
+            }
+          }
+          content += '</div>';
+          
+          if(posts.length % 12 != 0)
+            $("#btnShowMore").attr("disabled", true); //disable button to get more posts since there's no more posts to show
+        }
+        $("#postsDiv").append(content);    //update on the div with all the posts it got from getNineposts.php
+      }
     },
     error: function(xhr) {
       alert("fail: " + xhr);
