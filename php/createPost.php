@@ -14,30 +14,26 @@
     $content = $_FILES["content"];
     
     include_once("sendFile.php"); 
+    $flagNewContent = false;
+    if(isset($files)){
+        for ($i = 0; $i < count($files["content"]); $i++) {
+        
+            $type = explode( '/', $content["type"] )[0];
 
-    print_r($files);
-    print_r($ids);
+            if($type == "image" || $type == "video"){
+                $query = "INSERT INTO `post`(`user_id`, `event_id`, `content_id`) VALUES (" . $_POST['userId'] . "," . $_POST['eventId'] . ",". $ids[$i] . ")";
+                mysqli_query($linkIdentifier, $query);
 
-    for ($i = 0; $i < count($files["content"]); $i++) {
-    
-        $type = explode( '/', $content["type"] )[0];
+                $flagNewContent = true;   
+            }
 
-        print_r($type);
-        if($type == "image" || $type == "video"){
-            include_once("sendFile.php");
-
-            $query = "INSERT INTO `post`(`user_id`, `event_id`, `content_id`) VALUES (" . $_POST['userId'] . "," . $_POST['eventId'] . ",". $ids[$i] . ")";
-            mysqli_query($linkIdentifier, $query);
-
-            header("location:eventPage.php?eventId=" . $_POST["eventId"]);
         }
-        else{
-            header("location:eventFailed.php");
-        }
-
-
     }
-/*
-    
-    */
+    if($flagNewContent){
+        $query = "UPDATE `subscription` SET `notification` = 1 WHERE `event_id` = " . $_POST['eventId'] . " AND `user_id` != " . $_POST["userId"];
+        print_r($query);
+        mysqli_query($linkIdentifier, $query);
+    }
+    header("location:eventPage.php?eventId=" . $_POST["eventId"]);
+
 ?>
