@@ -116,10 +116,10 @@
 
 <script>
   $(document).ready(function(){
-    jsGlobal.setEventType(-1);
-    $("#btnShowMore").click();
+    $("#typeAll").click();
   });
 </script>
+
 <div class="w3-modal"  style="display:none" id="newEventModal">
   <?php
     if(!empty($_SESSION["userId"])){
@@ -204,26 +204,31 @@
 
     $("#typeAll").click(function(){
        $("#eventsDiv").empty();
-      jsGlobal.setEventType(-1);
+       jsGlobal.setNumEvents(0);
+       jsGlobal.setEventType(-1);
        getEvent();
     })
     $("#typeArt").click(function(){
        $("#eventsDiv").empty();
-      jsGlobal.setEventType(3);
+       jsGlobal.setNumEvents(0);
+       jsGlobal.setEventType(3);
        getEvent();
     })
     $("#typeExhibition").click(function(){
        $("#eventsDiv").empty();
-      jsGlobal.setEventType(2);
+       jsGlobal.setNumEvents(0);
+       jsGlobal.setEventType(2);
        getEvent();
     })
     $("#typeParty").click(function(){
        $("#eventsDiv").empty();
+       jsGlobal.setNumEvents(0);
        jsGlobal.setEventType(1);
        getEvent();
     })
     $("#typeFestival").click(function(){
        $("#eventsDiv").empty();
+       jsGlobal.setNumEvents(0);
        jsGlobal.setEventType(4);
        getEvent();
     })

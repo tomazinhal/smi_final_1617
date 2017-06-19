@@ -5,7 +5,7 @@
     $events = array();
     if(isset($_POST["numEvents"])){
         if($_POST["eventType"] != -1){
-            $query = "SELECT `event`.*, `content`.`url` FROM `event` INNER JOIN `content` ON `event`.`content_id` = `content`.`id` WHERE `event`.`type`=" . $_POST["eventType"] . "LIMIT 9 OFFSET " . $_POST["numEvents"];
+            $query = "SELECT `event`.*, `content`.`url` FROM `event` INNER JOIN `content` ON `event`.`content_id` = `content`.`id` WHERE `event`.`type`=" . $_POST["eventType"] . " LIMIT 9 OFFSET " . $_POST["numEvents"];
         }
         else{
             $query = "SELECT `event`.*, `content`.`url` FROM `event` INNER JOIN `content` ON `event`.`content_id` = `content`.`id` LIMIT 9 OFFSET " . $_POST["numEvents"];
