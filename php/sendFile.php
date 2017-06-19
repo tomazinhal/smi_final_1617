@@ -1,5 +1,5 @@
 <?php
-    if(isset($_POST) and $_SERVER['REQUEST_METHOD'] == "POST"){
+    if(isset($_FILES)){
 
         $files = array();                       //these loops is to reorder the $_FILES array (check at the end 
         foreach($_FILES as $key0=>$FILES) {     //of the php file how the array is going too look like)

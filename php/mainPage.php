@@ -9,7 +9,11 @@
 <style> body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif} </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
-<?php session_start();?>
+<?php session_start();
+  if(empty($_SESSION["userId"])){
+    include_once("getNotifications.php");
+  }
+?>
 
 <!-- Side menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
@@ -47,7 +51,19 @@
               <a href="loginFrame.php" style="margin-top:1%" class="w3-button w3-right">Log In</a>';
       }
       else{
+        echo '<div class="w3-right" style="margin-top:1%">';
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
+
+        echo '<button id="notificationButton" onclick="notification_open()" class="w3-right w3-button w3-circle w3-ripple" style="margin-top:1.3%; margin-right:20px; background-color:transparent">';
+        echo '<img alt="notification" src="/smiProject/Content/static/notification_icon.png" width="30" height="30">';
+        echo '</button>';
+
+        echo '<div id="notificationMenu" style="position: absolute; right:1px; top:74px; background-color:#fff; box-shadow: 0 5px 10px rgba(0,0,0,.2);';
+        echo '                      width:320px; border:1px solid #ccc; z-index:12; display:none">';
+        echo '  <div style="height:30px; border-bottom: 1px solid #ddd"><h3 style="text-align:center; line-height:20px">Notifications</h3></div>';
+        echo '    <div id="notificationContent" style="height:400px"></div>';
+        echo '  </div>';
+        echo '</div>';
       }
     ?>
     
@@ -60,7 +76,7 @@
     $("#btnShowMore").click();
   });
 </script>
-
+<?php print_r($notifications);?>
 <div class="w3-modal"  style="display:none" id="newEventModal">
   <?php
     if(!empty($_SESSION["userId"])){
@@ -115,8 +131,16 @@
 </div>
 
 <script>
+  function notification_open(){
+    document.getElementById("notificationMenu").style.display = "block";
+    document.getElementById("notificationButton").onclick = function(){ notification_close();};
+  }
   
-  
+  function notification_close(){
+    document.getElementById("notificationMenu").style.display = "none";
+    document.getElementById("notificationButton").onclick = function(){ notification_open();};
+  }
+
   function newEventModal_close(){
     document.getElementById("newEventModal").style.display = "none";
   }
