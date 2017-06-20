@@ -20,6 +20,7 @@
   jsGlobal = (function () {   //Method to get a global variable not being global yet able to be seen by others
       var numEvents = 0; // Private Variable
       var eventType = -1;
+      var keyword = "";
 
       var pub = {};// public object - returned at end of module
 
@@ -39,6 +40,13 @@
           return eventType;
       }
 
+      pub.setKeyword = function (keyword_) {
+          keyword = keyword_;
+      };
+
+      pub.getKeyword = function() {
+          return keyword;
+      }
       return pub; // expose externally
   }());
 </script>
@@ -59,9 +67,8 @@
   <header id="Website" class="w3-container w3-border-bottom w3-animate-left">
     <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
-    <span  style="margin-left:10%">Category:</span>
+    <span style="margin-left:4%">Category:</span>
     <button class="w3-button w3-white we-card" id="-1">ALL</button>
-    
     <div class="w3-dropdown-hover">
       <button class="w3-button w3-white we-card">Apply Category Filter</button>
       <div class="w3-dropdown-content w3-bar-block w3-border" style="max-height:400px; overflow-y:scroll;">
@@ -72,6 +79,7 @@
         ?>
       </div>
     </div>
+    <input style="margin-left:4%; display:inline-block; width:300px; max-width:500px" placeholder="Search your event by name" type="text" id="keywordSearch" class="w3-input w3-animate-input"/>
 
     <?php
       if(empty($_SESSION["userId"])){
@@ -211,8 +219,6 @@
     });
     
     <?php
-
-    
       for($i = 0; $i < count($eventTypes); $i++){
         echo '$("#' . $eventTypes[$i][0] . '").click(function(){';
         echo '  $("#eventsDiv").empty();';
@@ -222,8 +228,17 @@
         echo '});';
         echo PHP_EOL;
       }
-
     ?>
+
+    $("#keywordSearch").keyup(function(e){
+      if(e.keyCode == 13){
+        $("#eventsDiv").empty();
+        jsGlobal.setNumEvents(0);
+        jsGlobal.setEventType(-2);
+        jsGlobal.setKeyword($("#keywordSearch").val());
+        getEvent();
+      }
+    });
 
 
     /*var eventTypes = <?=json_encode($eventTypes)?>;
@@ -238,7 +253,8 @@
       type: "post",
       url: "getNineEvents.php",
       data: { "numEvents": jsGlobal.getNumEvents(), 
-              "eventType": jsGlobal.getEventType()},
+              "eventType": jsGlobal.getEventType(),
+              "keyword": jsGlobal.getKeyword()},
       dataType: 'json',
 
       success: function (events) {
