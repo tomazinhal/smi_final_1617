@@ -97,7 +97,6 @@
 <!-- Side menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
   <br><br><br>
-  <button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button> 
   <?php
     if(isset($_SESSION["userId"])){
       echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Request Role</button>';
@@ -105,12 +104,23 @@
     }
   ?>
    
+   <?php
+    if(isset($_SESSION["userRole"]) && $_SESSION["userRole"] == 2 || $_SESSION["userRole"] == 3){
+      echo '<br><br>';
+      echo '<h3 class="w3-bar-item w3-padding">Supporter commands</h3>';
+      echo '<button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button>';
+      echo '<button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Create Category</button>';
+    }
+  ?>
 
   <?php
     if(isset($_SESSION["userRole"]) && $_SESSION["userRole"] == 3){
       echo '<br><br>';
-      echo '<h3 class="w3-bar-item w3-padding">Admin Commands</h3>';
-      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Request Role</button>';
+      echo '<h3 class="w3-bar-item w3-padding">Admin commands</h3>';
+      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage requests</button>';
+      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Users</button>';
+      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Events</button>';
+      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Posts</button>';
     }
   ?>
 </nav>

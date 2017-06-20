@@ -52,7 +52,7 @@ The work must be performed in the following phases:
 
 This is our second database sketch.
 
-![Database](misc/database_sketch2.PNG "Initial database sketch")
+![Database](misc/database_sketch_2.PNG "Initial database sketch")
 
 ## References
 
