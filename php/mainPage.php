@@ -70,10 +70,6 @@
             echo '<button style="width:100%" class="w3-button w3-white we-card" id="' . $eventTypes[$i][0] . '">' . $eventTypes[$i][1] . '</button>';
           }
         ?>
-        
-        <!--<a href="#" class="w3-bar-item w3-button" id="3">Festival</a>
-        <a href="#" class="w3-bar-item w3-button">Option 2</a>
-        <a href="#" class="w3-bar-item w3-button">Option 3</a>-->
       </div>
     </div>
 
