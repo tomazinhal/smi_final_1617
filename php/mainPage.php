@@ -10,9 +10,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 <?php session_start();
+  include_once("getEventTypes.php");
   if(isset($_SESSION["userId"])){
     include_once("getNotifications.php");
-    include_once("getEventTypes.php");
   }
 ?>
 
@@ -63,7 +63,7 @@
     <button class="w3-button w3-white we-card" id="-1">ALL</button>
     
     <div class="w3-dropdown-hover">
-      <button class="w3-button w3-white we-card">Show More Categories</button>
+      <button class="w3-button w3-white we-card">Apply Category Filter</button>
       <div class="w3-dropdown-content w3-bar-block w3-border" style="max-height:400px; overflow-y:scroll;">
         <?php
           for($i = 0; $i < count($eventTypes); $i++){
@@ -135,9 +135,9 @@
         echo '            <label><b>Type of Event</b></label>';
         echo '            <select class="w3-select" name="type" required>';
         echo '                <option value="" disabled selected>Choose a type</option>';
-        echo '                <option value="1">Party</option>';
-        echo '                <option value="2">Exhibition</option>';
-        echo '                <option value="3">Art</option>';
+        for($i = 0; $i < count($eventTypes); $i++){
+            echo '<option value="' . $eventTypes[$i][0] . '">' . $eventTypes[$i][1] . '</option>';
+          }
         echo '            </select><br><br>';
         echo '            <label><b>Event description</b></label><br><br>';
         echo '            <textarea rows="4" cols="50" name="description" required></textarea><br>';

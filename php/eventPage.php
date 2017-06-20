@@ -159,7 +159,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     if(!empty($_SESSION["userId"])){
         echo '<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:700px">';
         echo '    <div class="w3-center"><br>';
-        echo '        <span onclick=newEventModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '        <span onclick=contentModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
         echo '    </div>';
         echo '    <form style="display:inline-block; vertical-align:middle; margin-left:100px" enctype="multipart/form-data" action="createPost.php" method="POST">';
         echo '           Upload content: <input type="file" name="content[]" accept="image/*,video/*" multiple>';
