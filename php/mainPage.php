@@ -135,9 +135,11 @@
         echo '            <label><b>Type of Event</b></label>';
         echo '            <select class="w3-select" name="type" required>';
         echo '                <option value="" disabled selected>Choose a type</option>';
-        echo '                <option value="1">Party</option>';
-        echo '                <option value="2">Exhibition</option>';
-        echo '                <option value="3">Art</option>';
+
+        for($i = 0; $i < count($eventTypes); $i++){
+          echo '                <option id="' . $eventTypes[$i][0] . '">' . $eventTypes[$i][1] . '</option>';
+        }
+
         echo '            </select><br><br>';
         echo '            <label><b>Event description</b></label><br><br>';
         echo '            <textarea rows="4" cols="50" name="description" required></textarea><br>';
