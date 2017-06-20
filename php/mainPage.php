@@ -61,15 +61,19 @@
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
     <span  style="margin-left:10%">Category:</span>
     <button class="w3-button w3-white we-card" id="-1">ALL</button>
-    <button class="w3-button w3-white we-card" id="0">Party</button>
-    <button class="w3-button w3-white we-card" id="1">Exhibition</button>
-    <button class="w3-button w3-white we-card" id="2">Art</button>
+    
     <div class="w3-dropdown-hover">
       <button class="w3-button w3-white we-card">Show More Categories</button>
       <div class="w3-dropdown-content w3-bar-block w3-border" style="max-height:400px; overflow-y:scroll;">
-        <a href="#" class="w3-bar-item w3-button" id="3">Festival</a>
+        <?php
+          for($i = 0; $i < count($eventTypes); $i++){
+            echo '<button style="width:100%" class="w3-button w3-white we-card" id="' . $eventTypes[$i][0] . '">' . $eventTypes[$i][1] . '</button>';
+          }
+        ?>
+        
+        <!--<a href="#" class="w3-bar-item w3-button" id="3">Festival</a>
         <a href="#" class="w3-bar-item w3-button">Option 2</a>
-        <a href="#" class="w3-bar-item w3-button">Option 3</a>
+        <a href="#" class="w3-bar-item w3-button">Option 3</a>-->
       </div>
     </div>
 
