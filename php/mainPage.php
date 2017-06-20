@@ -12,6 +12,7 @@
 <?php session_start();
   if(isset($_SESSION["userId"])){
     include_once("getNotifications.php");
+    include_once("getEventTypes.php");
   }
 ?>
 
@@ -58,15 +59,15 @@
   <header id="Website" class="w3-container w3-border-bottom w3-animate-left">
     <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
-    <span  style="margin-left:10%">Category:</span> 
-    <button class="w3-button w3-white we-card" id="typeAll">ALL</button>
-    <button class="w3-button w3-white we-card" id="typeParty">Party</button>
-    <button class="w3-button w3-white we-card" id="typeExhibition">Exhibition</button>
-    <button class="w3-button w3-white we-card" id="typeArt">Art</button>
+    <span  style="margin-left:10%">Category:</span>
+    <button class="w3-button w3-white we-card" id="-1">ALL</button>
+    <button class="w3-button w3-white we-card" id="0">Party</button>
+    <button class="w3-button w3-white we-card" id="1">Exhibition</button>
+    <button class="w3-button w3-white we-card" id="2">Art</button>
     <div class="w3-dropdown-hover">
       <button class="w3-button w3-white we-card">Show More Categories</button>
-      <div class="w3-dropdown-content w3-bar-block w3-border">
-        <a href="#" class="w3-bar-item w3-button" id="typeFestival">Festival</a>
+      <div class="w3-dropdown-content w3-bar-block w3-border" style="max-height:400px; overflow-y:scroll;">
+        <a href="#" class="w3-bar-item w3-button" id="3">Festival</a>
         <a href="#" class="w3-bar-item w3-button">Option 2</a>
         <a href="#" class="w3-bar-item w3-button">Option 3</a>
       </div>
@@ -116,7 +117,7 @@
 
 <script>
   $(document).ready(function(){
-    $("#typeAll").click();
+    $("#-1").click();
   });
 </script>
 
@@ -202,36 +203,33 @@
       document.getElementById("myOverlay").style.display = "none";
   }
 
-    $("#typeAll").click(function(){
+    $("#-1").click(function(){
        $("#eventsDiv").empty();
        jsGlobal.setNumEvents(0);
        jsGlobal.setEventType(-1);
        getEvent();
-    })
-    $("#typeArt").click(function(){
-       $("#eventsDiv").empty();
-       jsGlobal.setNumEvents(0);
-       jsGlobal.setEventType(3);
-       getEvent();
-    })
-    $("#typeExhibition").click(function(){
-       $("#eventsDiv").empty();
-       jsGlobal.setNumEvents(0);
-       jsGlobal.setEventType(2);
-       getEvent();
-    })
-    $("#typeParty").click(function(){
-       $("#eventsDiv").empty();
-       jsGlobal.setNumEvents(0);
-       jsGlobal.setEventType(1);
-       getEvent();
-    })
-    $("#typeFestival").click(function(){
-       $("#eventsDiv").empty();
-       jsGlobal.setNumEvents(0);
-       jsGlobal.setEventType(4);
-       getEvent();
-    })
+    });
+    
+    <?php
+
+    
+      for($i = 0; $i < count($eventTypes); $i++){
+        echo '$("#' . $eventTypes[$i][0] . '").click(function(){';
+        echo '  $("#eventsDiv").empty();';
+        echo '  jsGlobal.setNumEvents(0);';
+        echo '  jsGlobal.setEventType(' . $eventTypes[$i][0] . ');';
+        echo '  getEvent();';
+        echo '});';
+        echo PHP_EOL;
+      }
+
+    ?>
+
+
+    /*var eventTypes = <?=json_encode($eventTypes)?>;
+    for(var i = 0; i < count(eventTypes); i++){
+      
+    } */   
 
     $("#btnShowMore").click(getEvent);
 
