@@ -136,8 +136,8 @@
         echo '            <select class="w3-select" name="type" required>';
         echo '                <option value="" disabled selected>Choose a type</option>';
         for($i = 0; $i < count($eventTypes); $i++){
-            echo '<option value="' . $eventTypes[$i][0] . '">' . $eventTypes[$i][1] . '</option>';
-          }
+          echo '              <option value="' . $eventTypes[$i][0] . '">' . $eventTypes[$i][1] . '</option>';
+        }
         echo '            </select><br><br>';
         echo '            <label><b>Event description</b></label><br><br>';
         echo '            <textarea rows="4" cols="50" name="description" required></textarea><br>';

@@ -11,6 +11,6 @@ INSERT INTO type (`id`, `name`) VALUES(2, "Art");
 INSERT INTO type (`id`, `name`) VALUES(3, "Festival");
 
 #insert users
-INSERT INTO user (`name`, `email`, `password`, `role`) VALUES("admin", "admin", "admin", 3)
-INSERT INTO user (`name`, `email`, `password`, `role`) VALUES("supporter", "supporter", "supporter", 2)
+INSERT INTO user (`name`, `email`, `password`, `role`) VALUES("admin", "admin", "admin", 3);
+INSERT INTO user (`name`, `email`, `password`, `role`) VALUES("supporter", "supporter", "supporter", 2);
 
