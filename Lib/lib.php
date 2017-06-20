@@ -102,6 +102,7 @@ function isValid($userName, $password) {
         $userData = mysqli_fetch_array($result);
         $userOk["id"] = $userData['id'];
         $userOk["username"] = $userData['name'];
+        $userOk["role"] = $userData['role'];
     }
     mysqli_free_result($result);
     mysqli_Close($linkIdentifier);

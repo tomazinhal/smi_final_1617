@@ -61,6 +61,13 @@ CREATE TABLE IF NOT EXISTS content
     PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS request
+(
+    user_id INT NOT NULL REFERENCES user(id),
+    role INT NOT NULL REFERENCES role(id),
+    status VARCHAR(100) NOT NULL,
+    PRIMARY KEY(user_id)
+);
 
 # Create FKs
 ALTER TABLE post

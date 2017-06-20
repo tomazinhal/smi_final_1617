@@ -19,6 +19,7 @@
         session_start();
         $_SESSION["userId"] = $userData["id"];
         $_SESSION["username"] = $userData["username"];
+        $_SESSION["userRole"] = $userData["role"];
         $newbase="/mainPage.php";
         $baseNextUrl = $baseUrl . $name . $newbase;
         header("Location:".$baseNextUrl); 
