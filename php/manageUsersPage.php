@@ -220,19 +220,7 @@
   }
 
   $(document).ready(function(){
-    $.ajax({ 
-      type: "post",
-      url: "getRequests.php",
-      data: {},
-      dataType: 'json',
-      success: function (requests_) {
-        $requests = requests_;
-        addToTable();
-      },
-      error: function(xhr) {
-        alert("fail on requesting " + xhr);
-      }
-    });
+    getRequests();
   });
 
   $saveRequests.click(function () {
@@ -256,16 +244,21 @@
         type: "post",
         url: "processRequests.php",
         data: {"requests": saveData},
+        success: function () {
+          getRequests();
+        },
       });
     }
 
+  });
+
+  function getRequests(){
     $.ajax({ 
       type: "post",
       url: "getRequests.php",
       data: {},
       dataType: 'json',
       success: function (requests_) {
-        alert(requests_.length);
         $requests = requests_;
         $("#table tbody").empty();
         addToTable();
@@ -274,7 +267,7 @@
         alert("fail on requesting " + xhr);
       }
     });
-  });
+  }
 
   function showToast(string){
     $("#toast").empty();

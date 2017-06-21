@@ -131,13 +131,13 @@ function createCategory($typeName){
 
     $query = "SELECT max(`id`) FROM `smi_final`.`type`";
     $result = mysqli_query($linkIdentifier, $query);
-    $lastTypeId = mysqli_fetch_object($result);
+    $lastTypeId = mysqli_fetch_array($result)[0];
     $lastTypeId++;
 
-    echo("<p>".$lastTypeId."</p>");
+    print_r($lastTypeId);
     
     mysqli_free_result($result);
-    $query = "INSERT INTO `smi_final`.`type`(`type`, `type`) VALUES(".$lastTypeId + 1.", '".$typeName."')";
+    $query = "INSERT INTO `smi_final`.`type`(`id`, `name`) VALUES(" . $lastTypeId + 1 . ", '" . $typeName . "')";
     $result = mysqli_query($linkIdentifier, $query);
     mysqli_close($linkIdentifier);
 }
