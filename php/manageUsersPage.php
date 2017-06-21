@@ -7,33 +7,92 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-.cont_hover{
-    display:inline-block;
-    border:0;
-    width:auto;
-    height:auto;
-    position: relative;
-    -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(0.8); 
-    -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(0.8); 
-    -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(0.8);
-    transition: all 200ms ease-in;
-    transform: scale(0.8);   
-}
-.cont_hover:hover{
-    z-index: 2;
-    -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(1);
-    -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(1);   
-    -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(1);
-    transition: all 200ms ease-in;
-    transform: scale(1);
-}
+  body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+  #toast {
+      visibility: hidden;
+      min-width: 250px;
+      margin-left: -125px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 17px;
+    }
+
+    #toast.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 3.0s;
+        animation: fadein 0.5s, fadeout 0.5s 3.0s;
+    }
+
+    @-webkit-keyframes fadein {
+        from {bottom: 0; opacity: 0;} 
+        to {bottom: 30px; opacity: 1;}
+    }
+
+    @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+    }
+
+    @-webkit-keyframes fadeout {
+        from {bottom: 30px; opacity: 1;} 
+        to {bottom: 0; opacity: 0;}
+    }
+
+    @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+    }
+  .cont_hover{
+      display:inline-block;
+      border:0;
+      width:auto;
+      height:auto;
+      position: relative;
+      -webkit-transition: all 200ms ease-in;
+      -webkit-transform: scale(0.8); 
+      -ms-transition: all 200ms ease-in;
+      -ms-transform: scale(0.8); 
+      -moz-transition: all 200ms ease-in;
+      -moz-transform: scale(0.8);
+      transition: all 200ms ease-in;
+      transform: scale(0.8);   
+  }
+  .cont_hover:hover{
+      z-index: 2;
+      -webkit-transition: all 200ms ease-in;
+      -webkit-transform: scale(1);
+      -ms-transition: all 200ms ease-in;
+      -ms-transform: scale(1);   
+      -moz-transition: all 200ms ease-in;
+      -moz-transform: scale(1);
+      transition: all 200ms ease-in;
+      transform: scale(1);
+  }
+  .button_save{
+  border:1px solid #8AB31B; color: #FFFFFF;
+  background-color: #56E024; background-image: -webkit-gradient(linear, left top, left bottom, from(#56E024), to(#48BD1E));
+  background-image: -webkit-linear-gradient(top, #56E024, #48BD1E);
+  background-image: -moz-linear-gradient(top, #56E024, #48BD1E);
+  background-image: -ms-linear-gradient(top, #56E024, #48BD1E);
+  background-image: -o-linear-gradient(top, #56E024, #48BD1E);
+  background-image: linear-gradient(to bottom, #56E024, #48BD1E);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#56E024, endColorstr=#48BD1E);}
+
+  .button_save:hover{
+  border:1px solid #8AB31B;
+  background-color: #4CC720; background-image: -webkit-gradient(linear, left top, left bottom, from(#4CC720), to(#368C17));
+  background-image: -webkit-linear-gradient(top, #4CC720, #368C17);
+  background-image: -moz-linear-gradient(top, #4CC720, #368C17);
+  background-image: -ms-linear-gradient(top, #4CC720, #368C17);
+  background-image: -o-linear-gradient(top, #4CC720, #368C17);
+  background-image: linear-gradient(to bottom, #4CC720, #368C17);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#4CC720, endColorstr=#368C17);
+  }
 </style>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 <?php 
@@ -114,49 +173,30 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-main w3-content" style="max-width:1600px">
-  
-  <!--  Request Table
-  <div id="table" class="table-editable">
-    <span class="table-add glyphicon glyphicon-plus"></span>
-    <table class="w3-table">
-      <tr>
-      </tr>
-      <!This is our clonable table line -->
-      <!--
-      <tr class="hide">
-        <td>
-          <span class="table-remove glyphicon glyphicon-remove"></span>
-        </td>
-        <td>
-          <span class="table-up glyphicon glyphicon-arrow-up"></span>
-          <span class="table-down glyphicon glyphicon-arrow-down"></span>
-        </td>
-      </tr>
+  <div id="table" style="display:flex; justify-content:center">
+    <table class="table w3-table-all" style="max-width:800px">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>User ID</th>
+          <th>Present Role</th>
+          <th>Requested Role</th>
+          <th>Accept</th>
+          <th>Deny</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
     </table>
-  </div>-->
-
-  <div id="table">
-    <span class="table-add glyphicon glyphicon-plus"></span>
-    <table class="table w3-table w3-bordered">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Present Role</th>
-        <th>Requested Role</th>
-      </tr>
-    </table>
-  </div>
+  </div><br>
+  <button id="saveRequests" class="btn btn-primary w3-button w3-border button_save" style="height:40px;width:auto; margin:auto; display:block">Save Requests</button>
   
-  <button id="saveRequests" class="btn btn-primary">Save</button>
-
-
+  <div id="toast"></div>
 <!-- End page content -->
 </div>
 
-<button class="w3-button" onclick="addToTable('user', 1, 2)">Add</button>
-
 <script>
-  var $TABLE = $('#table');
   var $saveRequests = $('#saveRequests');
   var $numRequests = 0;
   var $requests;
@@ -164,21 +204,55 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   function addToTable(){
     var $addTable = "";
     for(var i = 0; i < $requests.length; i++){
-      if(i % 2 == 0) $color = 'w3-white';
-      else $color = 'w3-light-grey';
 
        $addTable += '\
-        <tr class="'+$color+'">\
+        <tr>\
           <td><input type="checkbox" id="check'+i+'"></input></td>\
           <td id="name'+i+'">'+$requests[i][0]+'</td>\
-          <td id="role'+i+'" contenteditable="true">'+$requests[i][1]+'</td>\
-          <td id="requestedRole'+i+'" contenteditable="true">'+$requests[i][2]+'</td>\
+          <td id="id'+i+'">'+$requests[i][1]+'</td>\
+          <td id="role'+i+'" >'+$requests[i][2]+'</td>\
+          <td id="requestedRole'+i+'" >'+$requests[i][3]+'</td>\
+          <td><input type="radio" name="action'+i+'" id="accept'+i+'" value="true" checked></input></td>\
+          <td><input type="radio" name="action'+i+'" id="deny'+i+'" value="false"></input></td>\
         </tr>'    
     }
-    $TABLE.find('table').append($addTable);
+    $('#table tbody').append($addTable);
   }
 
   $(document).ready(function(){
+    getRequests();
+  });
+
+  $saveRequests.click(function () {
+    var saveData = [];
+    for(var i = 0; i < $requests.length; i++){
+      var rowData = [];
+      if(document.getElementById("check"+i).checked){
+        rowData.push(document.getElementById("id"+i).innerText);
+        rowData.push(document.getElementById("role"+i).innerText);
+        rowData.push(document.getElementById("requestedRole"+i).innerText);
+        rowData.push($('input[name="action'+i+'"]:checked').val());
+      }
+      if(rowData.length != 0)
+        saveData.push(rowData);
+    }
+    if(saveData.length == 0){
+      showToast("No tables selected");
+    } 
+    else{
+      $.ajax({ 
+        type: "post",
+        url: "processRequests.php",
+        data: {"requests": saveData},
+        success: function () {
+          getRequests();
+        },
+      });
+    }
+
+  });
+
+  function getRequests(){
     $.ajax({ 
       type: "post",
       url: "getRequests.php",
@@ -186,28 +260,22 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       dataType: 'json',
       success: function (requests_) {
         $requests = requests_;
+        $("#table tbody").empty();
         addToTable();
       },
       error: function(xhr) {
         alert("fail on requesting " + xhr);
       }
     });
-  });
+  }
 
-
-
-  $saveRequests.click(function () {
-    var saveData = [];
-    for(var i = 0; i < $requests.length; i++){
-      if(document.getElementById("check"+i).checked){
-        var rowData = [];
-        rowData.push(document.getElementById("name"+i).innerText);
-        rowData.push(document.getElementById("role"+i).innerText);
-        rowData.push(document.getElementById("requestedRole"+i).innerText);
-        saveData.push(rowData);
-      }
-    }
-  });
+  function showToast(string){
+    $("#toast").empty();
+    $("#toast").append(string);
+    var x = document.getElementById("toast");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
+  }
 
 </script>
 
