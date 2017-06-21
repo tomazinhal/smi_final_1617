@@ -125,6 +125,39 @@ function getRole($userId) {
     return $userRoles;
 }
 
+function createCategory($typeName){
+    $linkIdentifier = mysqli_connect("localhost:3306", "root", "");      //TODO replace localhost with nameSpace
+    mysqli_select_db($linkIdentifier, "smi_final");
+
+    $query = "SELECT max(`id`) FROM `smi_final`.`type`";
+    $result = mysqli_query($linkIdentifier, $query);
+    $lastTypeId = mysqli_fetch_object($result);
+    $lastTypeId++;
+
+    echo("<p>".$lastTypeId."</p>");
+    
+    mysqli_free_result($result);
+    $query = "INSERT INTO `smi_final`.`type`(`type`, `type`) VALUES(".$lastTypeId + 1.", '".$typeName."')";
+    $result = mysqli_query($linkIdentifier, $query);
+    mysqli_close($linkIdentifier);
+}
+
+function manageRequests(){
+    //TODO
+}
+
+function manageUsers(){
+    //TODO
+}
+
+function manageEvents(){
+    //TODO
+}
+
+function managePosts(){
+    //TODO
+}
+
 function showUploadFileError($errorCode) {
     switch ($errorCode) {
         case UPLOAD_ERR_OK:

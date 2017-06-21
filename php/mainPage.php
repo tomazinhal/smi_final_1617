@@ -109,7 +109,7 @@
       echo '<br><br>';
       echo '<h3 class="w3-bar-item w3-padding">Supporter commands</h3>';
       echo '<button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button>';
-      echo '<button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Create Category</button>';
+      echo '<button onclick="newCategoryModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Create Category</button>';
     }
   ?>
 
@@ -261,10 +261,44 @@
         echo '    <div class="w3-center"><br>';
         echo '        <span onclick=newEventModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
         echo '    </div>';
-        echo '    <label><b>You have to an account to create new events</b></label>';
+        echo '    <label><b>You have to have an account to create new events</b></label>';
         echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
         echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</a>';
         echo '        <a onclick=newEventModal_close() class="w3-button w3-red">Cancel</a>';
+        echo '    </div>';
+        echo '</div>';
+    }
+  ?>
+</div>
+
+<div class="w3-modal"  style="display:none" id="newCategoryModal">
+  <?php
+    if(!empty($_SESSION["userId"])){
+        echo '<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">';
+        echo '    <div class="w3-center"><br>';
+        echo '        <span onclick=newCategoryModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '    </div>';
+        echo '    <form class="w3-container" action="createType.php" enctype="multipart/form-data"  nsubmit="return FormLoginValidator(this)" name="eventLogin" method="post">';
+        echo '        <div class="w3-section">';
+        echo '            <label><b>Category Name</b></label>';
+        echo '            <input class="w3-input w3-margin-bottom w3-animate-input" id="typeName" style="width:50%" type="text" placeholder="Enter a name" name="typeName" required>';
+        echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Create category</button>    ';
+        echo '        </div>';
+        echo '    </form>';
+        echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
+        echo '        <button onclick=newCategoryModal_close() type="button" class="w3-button w3-red">Cancel</button>';
+        echo '    </div>';
+        echo '</div>';
+    }
+    else{
+        echo ' <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:400px">';
+        echo '    <div class="w3-center"><br>';
+        echo '        <span onclick=newCategoryModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '    </div>';
+        echo '    <label><b>You have to an account to create new events</b></label>';
+        echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
+        echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</a>';
+        echo '        <a onclick=newCategoryModal_close() class="w3-button w3-red">Cancel</a>';
         echo '    </div>';
         echo '</div>';
     }
@@ -298,6 +332,14 @@
 
   function newEventModal_open(){
     document.getElementById("newEventModal").style.display = "block";
+  }
+
+  function newCategoryModal_open(){
+    document.getElementById("newCategoryModal").style.display = "block";
+  }
+
+  function newCategoryModal_close(){
+    document.getElementById("newCategoryModal").style.display = "none";
   }
 
   function roleModal_close(){
