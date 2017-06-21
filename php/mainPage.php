@@ -105,7 +105,7 @@
   ?>
    
    <?php
-    if(isset($_SESSION["userRole"]) && $_SESSION["userRole"] == 2 || $_SESSION["userRole"] == 3){
+    if(isset($_SESSION["userRole"]) && ($_SESSION["userRole"] == 2 || $_SESSION["userRole"] == 3)){
       echo '<br><br>';
       echo '<h3 class="w3-bar-item w3-padding">Supporter commands</h3>';
       echo '<button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button>';
@@ -117,8 +117,7 @@
     if(isset($_SESSION["userRole"]) && $_SESSION["userRole"] == 3){
       echo '<br><br>';
       echo '<h3 class="w3-bar-item w3-padding">Admin commands</h3>';
-      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage requests</button>';
-      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Users</button>';
+      echo '<a href="manageUsersPage.php" w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Users</a>';
       echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Events</button>';
       echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Posts</button>';
     }
@@ -329,18 +328,16 @@
 
       success: function (requests) {
 
-        $("#toast").empty();
-        
         if(requests != null){
           var role = requests[0];
           var status = requests[1];
 
-          $("#toast").append("Your request to " + role + " has the status:\"" + status + "\"");
+          showToast("Your request to " + role + " has the status:\"" + status + "\"");
         }
         else{
-          $("#toast").append("You don't have requests");
+          showToast("You don't have requests");
         }
-        showToast();
+        
       },
       error: function(xhr) {
         alert('fail')
@@ -349,7 +346,9 @@
 
   }
 
-  function showToast(){
+  function showToast(string){
+    $("#toast").empty();
+    $("#toast").append(string);
     var x = document.getElementById("toast");
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
