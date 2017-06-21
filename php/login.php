@@ -20,13 +20,13 @@
         $_SESSION["userId"] = $userData["id"];
         $_SESSION["username"] = $userData["username"];
         $_SESSION["userRole"] = $userData["role"];
-        $newbase="/mainPage.php";
+        $newbase="mainPage.php";
         $baseNextUrl = $baseUrl . $name . $newbase;
         header("Location:".$baseNextUrl); 
         //redirectToLastPage("", 0);   
     }
     else{
-        $newbase="/loginFrame.php";
+        $newbase="loginFrame.php";
         $baseNextUrl = $baseUrl . $name . $newbase;
         header("Location:".$baseNextUrl);
         //redirectToLastPage("", 0);  
