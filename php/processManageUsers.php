@@ -18,6 +18,12 @@
             else{
                 $query = "UPDATE `user` SET `role` = " . $_POST["users"][$i][1] . " WHERE `id` = ". $_POST["users"][$i][0];
                 mysqli_query($linkIdentifier, $query);
+
+                $query = "INSERT INTO `request`(`user_id`, `role`, `status`) VALUES (" . $_POST["users"][$i][0] . "," . $_POST["users"][$i][1] . ",'granted')";
+                mysqli_query($linkIdentifier, $query);
+
+                $query = "UPDATE `request` SET `role` = " . $_POST["users"][$i][1] . ", `status` = 'granted' WHERE `user_id` = ". $_POST["users"][$i][0];
+                mysqli_query($linkIdentifier, $query);
             }
         }
     }

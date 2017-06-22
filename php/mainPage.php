@@ -385,8 +385,7 @@
       error: function(xhr) {
         alert('fail')
       }
-  })
-
+    })
   }
 
   function showToast(string){
