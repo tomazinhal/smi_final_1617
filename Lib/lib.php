@@ -131,15 +131,23 @@ function createCategory($typeName){
 
     $query = "SELECT max(`id`) FROM `smi_final`.`type`";
     $result = mysqli_query($linkIdentifier, $query);
-    $lastTypeId = mysqli_fetch_array($result)[0];
-    $lastTypeId++;
-
-    print_r($lastTypeId);
+    $lastTypeId = mysqli_fetch_array($result);
+    $lastTypeId = $lastTypeId[0];
+    $typeId = $lastTypeId + 1;
     
     mysqli_free_result($result);
-    $query = "INSERT INTO `smi_final`.`type`(`id`, `name`) VALUES(" . $lastTypeId + 1 . ", '" . $typeName . "')";
+    $query = "INSERT INTO `smi_final`.`type`(`id`, `name`) VALUES(" . $typeId . ", '" . $typeName . "')";
     $result = mysqli_query($linkIdentifier, $query);
     mysqli_close($linkIdentifier);
+
+    $name = webAppName();
+    $serverName = $_SERVER['SERVER_NAME'];
+    $serverPort = 80;
+
+    $baseUrl = "http://" . $serverName . ":" . $serverPort;
+    $newbase="mainPage.php";
+    $baseNextUrl = $baseUrl . $name . $newbase;
+    header("location:" . $baseNextUrl);
 }
 
 function manageRequests(){
