@@ -7,33 +7,33 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-.cont_hover{
-    display:inline-block;
-    border:0;
-    width:auto;
-    height:auto;
-    position: relative;
-    -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(0.8); 
-    -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(0.8); 
-    -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(0.8);
-    transition: all 200ms ease-in;
-    transform: scale(0.8);   
-}
-.cont_hover:hover{
-    z-index: 2;
-    -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(1);
-    -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(1);   
-    -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(1);
-    transition: all 200ms ease-in;
-    transform: scale(1);
-}
+  body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+  .cont_hover{
+      display:inline-block;
+      border:0;
+      width:auto;
+      height:auto;
+      position: relative;
+      -webkit-transition: all 200ms ease-in;
+      -webkit-transform: scale(0.8); 
+      -ms-transition: all 200ms ease-in;
+      -ms-transform: scale(0.8); 
+      -moz-transition: all 200ms ease-in;
+      -moz-transform: scale(0.8);
+      transition: all 200ms ease-in;
+      transform: scale(0.8);   
+  }
+  .cont_hover:hover{
+      z-index: 2;
+      -webkit-transition: all 200ms ease-in;
+      -webkit-transform: scale(1);
+      -ms-transition: all 200ms ease-in;
+      -ms-transform: scale(1);   
+      -moz-transition: all 200ms ease-in;
+      -moz-transform: scale(1);
+      transition: all 200ms ease-in;
+      transform: scale(1);
+  }
 </style>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 <?php 
@@ -41,6 +41,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   $_SESSION["eventId"] = $_GET["eventId"];
   if(isset($_SESSION["userId"])){
     include_once("getNotifications.php");
+    include_once("getUserRole.php");
   }
 ?>
 
