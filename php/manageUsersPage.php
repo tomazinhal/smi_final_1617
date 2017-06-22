@@ -139,7 +139,7 @@
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
 
         echo '<button id="notificationButton" onclick="notification_open()" class="w3-right w3-button w3-circle w3-ripple" style="margin-top:1.3%; margin-right:20px; background-color:transparent">';
-        echo '<img alt="notification" src="/smiProject/Content/static/notification_icon.png" width="30" height="30">';
+        echo '<img alt="notification" src="/smi-final/Content/static/notification_icon.png" width="30" height="30">';
         echo '</button>';
 
         echo '<div id="notificationMenu" style="position: absolute; right:1px; top:74px; background-color:#fff; box-shadow: 0 5px 10px rgba(0,0,0,.2);';

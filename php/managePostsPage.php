@@ -138,7 +138,7 @@
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
 
         echo '<button id="notificationButton" onclick="notification_open()" class="w3-right w3-button w3-circle w3-ripple" style="margin-top:1.3%; margin-right:20px; background-color:transparent">';
-        echo '<img alt="notification" src="/smiProject/Content/static/notification_icon.png" width="30" height="30">';
+        echo '<img alt="notification" src="/smi-final/Content/static/notification_icon.png" width="30" height="30">';
         echo '</button>';
 
         echo '<div id="notificationMenu" style="position: absolute; right:1px; top:74px; background-color:#fff; box-shadow: 0 5px 10px rgba(0,0,0,.2);';
@@ -177,61 +177,54 @@
     <table class="table w3-table-all" style="max-width:800px">
       <thead>
         <tr>
-          <th></th>
-          <th>Name</th>
-          <th>User ID</th>
-          <th>Present Role</th>
-          <th>Requested Role</th>
-          <th>Accept</th>
-          <th>Deny</th>
+          <th>Delete</th>
+          <th>Event name</th>
+          <th>Post ID</th>
+          <th>URL</th>
+          <th>Creation</th>
         </tr>
       </thead>
       <tbody>
       </tbody>
     </table>
   </div><br>
-  <button id="saveRequests" class="btn btn-primary w3-button w3-border button_save" style="height:40px;width:auto; margin:auto; display:block">Save Requests</button>
+  <button id="savePosts" class="btn btn-primary w3-button w3-border button_save" style="height:40px;width:auto; margin:auto; display:block">Save Posts</button>
   
   <div id="toast"></div>
 <!-- End page content -->
 </div>
 
 <script>
-  var $saveRequests = $('#saveRequests');
-  var $numRequests = 0;
-  var $requests;
+  var $savePosts = $('#savePosts');
+  var $numPosts = 0;
+  var $posts;
 
   function addToTable(){
     var $addTable = "";
-    for(var i = 0; i < $requests.length; i++){
+    for(var i = 0; i < $posts.length; i++){
 
        $addTable += '\
         <tr>\
           <td><input type="checkbox" id="check'+i+'"></input></td>\
-          <td id="name'+i+'">'+$requests[i][0]+'</td>\
-          <td id="id'+i+'">'+$requests[i][1]+'</td>\
-          <td id="role'+i+'" >'+$requests[i][2]+'</td>\
-          <td id="requestedRole'+i+'" >'+$requests[i][3]+'</td>\
-          <td><input type="radio" name="action'+i+'" id="accept'+i+'" value="true" checked></input></td>\
-          <td><input type="radio" name="action'+i+'" id="deny'+i+'" value="false"></input></td>\
+          <td id="eventName'+i+'">'+$posts[i][0]+'</td>\
+          <td id="postId'+i+'">'+$posts[i][1]+'</td>\
+          <td id="url'+i+'" >'+$posts[i][2]+'</td>\
+          <td id="creation'+i+'" >'+$posts[i][3]+'</td>\
         </tr>'    
     }
     $('#table tbody').append($addTable);
   }
 
   $(document).ready(function(){
-    getRequests();
+    getPosts();
   });
 
-  $saveRequests.click(function () {
+  $savePosts.click(function () {
     var saveData = [];
-    for(var i = 0; i < $requests.length; i++){
+    for(var i = 0; i < $posts.length; i++){
       var rowData = [];
       if(document.getElementById("check"+i).checked){
-        rowData.push(document.getElementById("id"+i).innerText);
-        rowData.push(document.getElementById("role"+i).innerText);
-        rowData.push(document.getElementById("requestedRole"+i).innerText);
-        rowData.push($('input[name="action'+i+'"]:checked').val());
+        rowData.push(document.getElementById("postId"+i).innerText);
       }
       if(rowData.length != 0)
         saveData.push(rowData);
@@ -242,24 +235,23 @@
     else{
       $.ajax({ 
         type: "post",
-        url: "processRequests.php",
-        data: {"requests": saveData},
+        url: "processPosts.php",
+        data: {"posts": saveData},
         success: function () {
-          getRequests();
+          getPosts();
         },
       });
     }
-
   });
 
-  function getRequests(){
+  function getPosts(){
     $.ajax({ 
       type: "post",
-      url: "getRequests.php",
+      url: "getPosts.php",
       data: {},
       dataType: 'json',
-      success: function (requests_) {
-        $requests = requests_;
+      success: function (posts_) {
+        $posts = posts_;
         $("#table tbody").empty();
         addToTable();
       },

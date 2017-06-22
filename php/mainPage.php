@@ -119,8 +119,8 @@
       echo '<br><br>';
       echo '<h3 class="w3-bar-item w3-padding">Admin commands</h3>';
       echo '<a href="manageUsersPage.php" w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Users</a>';
-      echo '<a href="manageEventsPage.php; w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Events</a>';
-      echo '<a href="managePostsPage.php; w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Posts</a>';
+      echo '<a href="manageEventsPage.php" w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Events</a>';
+      echo '<a href="managePostsPage.php" w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Posts</a>';
     }
   ?>
 </nav>
@@ -148,7 +148,7 @@
       </div>
     </div>
     <input style="margin-left:4%; display:inline-block; width:300px; padding: 5px 8px 8px 40px;
-            max-width:450px; background-image:url('/smiProject/Content/Static/search_icon.png');
+            max-width:450px; background-image:url('/smi-final/Content/static/search_icon.png');
             background-size: 30px 30px; background-repeat:no-repeat; box-sizing:border-box " 
             placeholder="Search your event by name" type="text" id="keywordSearch" 
             class="w3-input w3-light-grey w3-margin-bottom w3-animate-input w3-hover-white"/>
@@ -163,7 +163,7 @@
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
 
         echo '<button id="notificationButton" onclick="notification_open()" class="w3-right w3-button w3-circle w3-ripple" style="margin-top:1.3%; margin-right:20px; background-color:transparent">';
-        echo '<img alt="notification" src="/smiProject/Content/Static/notification_icon.png" width="30" height="30">';
+        echo '<img alt="notification" src="/smi-final/Content/static/notification_icon.png" width="30" height="30">';
         echo '</button>';
 
         echo '<div id="notificationMenu" style="position: absolute; right:1px; top:74px; background-color:#fff; box-shadow: 0 5px 10px rgba(0,0,0,.2);';
@@ -463,7 +463,7 @@
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                   <div class="w3-third   w3-container w3-margin-bottom">\
                     <!--<img src="./../../' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
-                    <img src="/smiProject/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                    <img src="/smi-final/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
                     <div class="w3-container w3-white">\
                       <p><b>' + events[eventNum][1] + '</b></p>\
                       <p>' + events[eventNum][2] + '</p>\
@@ -479,7 +479,7 @@
                 <a href="eventPage.php?eventId=' + events[eventNum][0] + '">\
                 <div class="w3-third   w3-container w3-margin-bottom">\
                   <!--<img src="./../../' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">-->\
-                  <img src="/smiProject/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
+                  <img src="/smi-final/Content/' + events[eventNum]["url"] + '" alt="Event" style="width:100%" class="w3-hover-opacity">\
                   <div class="w3-container w3-white">\
                     <p><b>' + events[eventNum][1] + '</b></p>\
                     <p>' + events[eventNum][2] + '</p>\

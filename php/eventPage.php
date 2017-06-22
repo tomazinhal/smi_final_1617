@@ -81,7 +81,7 @@
         echo '<a href="logout.php" style="margin-top:1%" class="w3-button w3-right">Log out</a>';
 
         echo '<button id="notificationButton" onclick="notification_open()" class="w3-right w3-button w3-circle w3-ripple" style="margin-top:1.3%; margin-right:20px; background-color:transparent">';
-        echo '<img alt="notification" src="/smiProject/Content/static/notification_icon.png" width="30" height="30">';
+        echo '<img alt="notification" src="/smi-final/Content/static/notification_icon.png" width="30" height="30">';
         echo '</button>';
 
         echo '<div id="notificationMenu" style="position: absolute; right:1px; top:74px; background-color:#fff; box-shadow: 0 5px 10px rgba(0,0,0,.2);';
@@ -289,7 +289,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
           if(i == (numRows - 1) && lastLinePosts != 0){   //check necessary to handle the last line since it can have less 
             for(var j = 0; j < lastLinePosts; j++){                               //than 4 posts
               //var scr = './../../' + posts[postNum][0];
-              var scr = '/smiProject/' + posts[postNum][0];
+              var scr = '/smi-final/' + posts[postNum][0];
               if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
                 content += '\
                   <div class="w3-quarter">\
@@ -311,7 +311,7 @@ $("#btnShowMore").click(function(){   //method to get up to 9 more posts and upd
           else{
             for(var j = 0; j < 4; j++){
               //var scr = './../../' + event["thumbnail"];
-              var scr = '/smiProject/' + posts[postNum][0];
+              var scr = '/smi-final/' + posts[postNum][0];
               if(posts[postNum][0].substr(posts[postNum][0].lastIndexOf(".")+1) == "png"){ 
                 content += '\
                   <div class="w3-quarter">\
@@ -353,7 +353,7 @@ $(document).ready(function(){
     dataType: 'json',
     success: function (event) {
       //var scr = './../../' + event["url"];
-      var scr = '/smiProject/' + event["url"];
+      var scr = '/smi-final/' + event["url"];
       var content = '\
       <div style="height:100%">\
           <div class="w3-twothird">\
