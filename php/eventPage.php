@@ -34,6 +34,46 @@
       transition: all 200ms ease-in;
       transform: scale(1);
   }
+  #toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+  }
+  #toast.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 3.0s;
+      animation: fadein 0.5s, fadeout 0.5s 3.0s;
+  }
+
+  @-webkit-keyframes fadein {
+      from {bottom: 0; opacity: 0;} 
+      to {bottom: 30px; opacity: 1;}
+  }
+
+  @keyframes fadein {
+      from {bottom: 0; opacity: 0;}
+      to {bottom: 30px; opacity: 1;}
+  }
+
+  @-webkit-keyframes fadeout {
+      from {bottom: 30px; opacity: 1;} 
+      to {bottom: 0; opacity: 0;}
+  }
+
+  @keyframes fadeout {
+      from {bottom: 30px; opacity: 1;}
+      to {bottom: 0; opacity: 0;}
+  }
 </style>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 <?php 
@@ -48,27 +88,45 @@
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-animate-left w3-top w3-text-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;left:0;" id="mySidebar">
   <br><br><br>
-  <button onclick=newEventModal_open(); w3_close() class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button> 
-  <button onclick=contentModal_open(); w3_close() class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Post new content</button>
   <?php
-  if(!empty($_SESSION["userId"])){
-    
-    include_once("isSubscribed.php");
+    if(isset($_SESSION["userId"])){
+      echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Request Role</button>';
+      echo '<button onclick="getRoleInformation(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Your role information</button>';    
+      
+      include_once("isSubscribed.php");
+      if($isSubed){
+        echo '<a href="unsubscribe.php" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Unsubscribe</a>';
+      }
+      else{
+        echo '<a href="subscribe.php" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Subscribe</a>';
+      }
+    }
 
-    if($isSubed){
-      echo '<a href="unsubscribe.php" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Unsubscribe</a>';
+    if(isset($_SESSION["userRole"]) && ($_SESSION["userRole"] == 2 || $_SESSION["userRole"] == 3)){
+      echo '<br><br>';
+      echo '<h3 class="w3-bar-item w3-padding">Supporter commands</h3>';
+      echo '<button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button>';
+      echo '<button onclick="newCategoryModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Create Category</button>';
+      echo '<button onclick=contentModal_open(); w3_close() class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Post new content</button>';
     }
-    else{
-      echo '<a href="subscribe.php" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Subscribe</a>';
+
+    if(isset($_SESSION["userRole"]) && $_SESSION["userRole"] == 3){
+      echo '<br><br>';
+      echo '<h3 class="w3-bar-item w3-padding">Admin commands</h3>';
+      echo '<a href="manageUsersPage.php" w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Users</a>';
+      echo '<a href="manageEventsPage.php; w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Events</a>';
+      echo '<a href="managePostsPage.php; w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Manage Posts</a>';
     }
-  }
   ?>
    
 </nav>
 
 <!-- Header -->
   <header id="Website" class="w3-container w3-border-bottom w3-animate-left">
-    <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
+    <?php 
+    if(!empty($_SESSION["userId"]))
+      echo'<button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>';
+    ?>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
     
     <?php
@@ -186,6 +244,68 @@
   ?>
 </div>
 
+<div class="w3-modal"  style="display:none" id="roleModal">
+  <?php
+    if(!empty($_SESSION["userId"])){
+      include_once("getRoles.php");
+      echo '<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">';
+      echo '    <div class="w3-center"><br>';
+      echo '        <span onclick=roleModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+      echo '    </div>';
+      echo '    <form class="w3-container" action="requestRole.php" enctype="multipart/form-data"  nsubmit="return FormLoginValidator(this)" name="requestRole" method="post">';
+      echo '        <div class="w3-section">';
+      echo '            <label><b>Choose the role type you want</b></label>';
+      echo '            <select class="w3-select" name="role" required>';
+      echo '                <option value="" disabled selected>Choose a type</option>';
+      for($i = 0; $i < count($roles); $i++){
+        echo '              <option value="' . $roles[$i][0] . '">' . $roles[$i][1] . '</option>';
+      }
+      echo '            </select><br><br>';
+      echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Request Role</button>    ';
+      echo '        </div>';
+      echo '    </form>';
+      echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
+      echo '        <button onclick=roleModal_close() type="button" class="w3-button w3-red">Cancel</button>';
+      echo '    </div>';
+      echo '</div>';
+    }
+  ?>
+</div>
+
+<div class="w3-modal"  style="display:none" id="newCategoryModal">
+  <?php
+    if(!empty($_SESSION["userId"])){
+        echo '<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">';
+        echo '    <div class="w3-center"><br>';
+        echo '        <span onclick=newCategoryModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '    </div>';
+        echo '    <form class="w3-container" action="createType.php" enctype="multipart/form-data"  nsubmit="return FormLoginValidator(this)" name="eventLogin" method="post">';
+        echo '        <div class="w3-section">';
+        echo '            <label><b>Category Name</b></label>';
+        echo '            <input class="w3-input w3-margin-bottom w3-animate-input" id="typeName" style="width:50%" type="text" placeholder="Enter a name" name="typeName" required>';
+        echo '            <button class="w3-button w3-block w3-green w3-section w3-padding" id="eventBtn" type="submit">Create category</button>    ';
+        echo '        </div>';
+        echo '    </form>';
+        echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
+        echo '        <button onclick=newCategoryModal_close() type="button" class="w3-button w3-red">Cancel</button>';
+        echo '    </div>';
+        echo '</div>';
+    }
+    else{
+        echo ' <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:400px">';
+        echo '    <div class="w3-center"><br>';
+        echo '        <span onclick=newCategoryModal_close() class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>';
+        echo '    </div>';
+        echo '    <label><b>You have to an account to create new events</b></label>';
+        echo '    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">';
+        echo '        <a href="loginFrame.php" class="w3-button w3-green">Log In</a>';
+        echo '        <a onclick=newCategoryModal_close() class="w3-button w3-red">Cancel</a>';
+        echo '    </div>';
+        echo '</div>';
+    }
+  ?>
+</div>
+
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
@@ -195,18 +315,44 @@
   <div class="w3-container w3-border-bottom w3-animate-zoom" style="height:200px" id="eventInfo"></div>
   
   <!-- Photo grid -->
-  <div class="w3-row w3-grayscale-min" id="postsDiv">
-    
-  </div>
+  <div class="w3-row w3-grayscale-min" id="postsDiv"></div>
 
   <div class="w3-center w3-padding-32">
     <button class="w3-button w3-white we-card w3-animate-zoom" id="btnShowMore">Show more!</button>
   </div>
+
+  <div id="toast"></div>
 <!-- End page content -->
 </div>
 
 <script>
-  
+  function getRoleInformation() {
+    
+    $.ajax({        //post communication to getNineEvents.php
+      type: "post",
+      url: "getInfoRoleRequest.php",
+      data: {},
+      dataType: 'json',
+
+      success: function (requests) {
+
+        if(requests != null){
+          var role = requests[0];
+          var status = requests[1];
+
+          showToast("Your request to " + role + " has the status:\"" + status + "\"");
+        }
+        else{
+          showToast("You don't have requests");
+        }
+        
+      },
+      error: function(xhr) {
+        alert('fail')
+      }
+    })
+  }
+
   $(document).ready(function(){
     $("#btnShowMore").click();
   });
@@ -237,6 +383,22 @@
     document.getElementById("contentModal").style.display = "block";
   }
 
+  function newCategoryModal_open(){
+    document.getElementById("newCategoryModal").style.display = "block";
+  }
+
+  function newCategoryModal_close(){
+    document.getElementById("newCategoryModal").style.display = "none";
+  }
+
+  function roleModal_close(){
+    document.getElementById("roleModal").style.display = "none";
+  }
+
+  function roleModal_open(){
+    document.getElementById("roleModal").style.display = "block";
+  }
+
 // Script to open and close sidebar
 function w3_open() {
     document.getElementById("mySidebar").style.display = "block";
@@ -247,6 +409,14 @@ function w3_close() {
     document.getElementById("mySidebar").style.display = "none";
     document.getElementById("myOverlay").style.display = "none";
 }
+
+function showToast(string){
+    $("#toast").empty();
+    $("#toast").append(string);
+    var x = document.getElementById("toast");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
+  }
 
 var jsGlobal = (function () {   //Method to get a global variable not being global yet able to be seen by others
     var numPosts = 0; // Private Variable

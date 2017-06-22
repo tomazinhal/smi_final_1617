@@ -103,18 +103,14 @@
       echo '<button onclick="roleModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Request Role</button>';
       echo '<button onclick="getRoleInformation(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Your role information</button>';
     }
-  ?>
    
-   <?php
     if(isset($_SESSION["userRole"]) && ($_SESSION["userRole"] == 2 || $_SESSION["userRole"] == 3)){
       echo '<br><br>';
       echo '<h3 class="w3-bar-item w3-padding">Supporter commands</h3>';
       echo '<button onclick="newEventModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Make a new event</button>';
       echo '<button onclick="newCategoryModal_open(); w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Create Category</button>';
     }
-  ?>
 
-  <?php
     if(isset($_SESSION["userRole"]) && $_SESSION["userRole"] == 3){
       echo '<br><br>';
       echo '<h3 class="w3-bar-item w3-padding">Admin commands</h3>';
@@ -133,7 +129,10 @@
 
   <!-- Header -->
   <header id="Website" class="w3-container w3-border-bottom w3-animate-left">
-    <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
+    <?php 
+    if(!empty($_SESSION["userId"]))
+      echo'<button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>';
+    ?>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
     <span style="margin-left:4%">Category:</span>
     <button class="w3-button w3-white we-card" id="-1">ALL</button>
@@ -385,8 +384,7 @@
       error: function(xhr) {
         alert('fail')
       }
-  })
-
+    })
   }
 
   function showToast(string){

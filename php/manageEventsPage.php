@@ -128,7 +128,10 @@
 
 <!-- Header -->
   <header id="Website" class="w3-container w3-border-bottom w3-animate-left">
-    <button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
+    <?php 
+    if(!empty($_SESSION["userId"]))
+      echo'<button style="display:inline-block; vertical-align:middle" class="w3-button w3-xlarge" onclick="w3_open()">☰</button>';
+    ?>
     <a href="mainPage.php"><h1 style="display:inline-block; vertical-align:middle" ><b>My Website</b></h1></a>
     
     <?php
