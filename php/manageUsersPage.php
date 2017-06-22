@@ -99,6 +99,7 @@
   session_start(); 
   if(isset($_SESSION["userId"])){
     include_once("getNotifications.php");
+    include_once("getUserRole.php");
   }
 ?>
 
@@ -173,7 +174,28 @@
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-main w3-content" style="max-width:1600px">
-  <div id="table" style="display:flex; justify-content:center">
+  <h2 style="text-align:center">Manage Users</h2>
+  <div id="tableUsers" style="display:flex; justify-content:center">
+    <table class="table w3-table-all" style="max-width:800px">
+      <thead>
+        <tr>
+          <th></th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Delete User</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div><br>
+  <button id="saveUsers" class="w3-button w3-border button_save" style="height:40px;width:auto; margin:auto; display:block">Save User Changes</button>
+  <br><br><br><br>
+
+<div class="w3-main w3-content" style="max-width:1600px">
+  <h2 style="text-align:center">Manage pending request</h2>
+  <div id="tableRequests" style="display:flex; justify-content:center">
     <table class="table w3-table-all" style="max-width:800px">
       <thead>
         <tr>
@@ -190,48 +212,70 @@
       </tbody>
     </table>
   </div><br>
-  <button id="saveRequests" class="btn btn-primary w3-button w3-border button_save" style="height:40px;width:auto; margin:auto; display:block">Save Requests</button>
-  
+  <button id="saveRequests" class="w3-button w3-border button_save" style="height:40px;width:auto; margin:auto; display:block">Save Requests</button>
+  <br><br><br>
   <div id="toast"></div>
 <!-- End page content -->
 </div>
 
 <script>
-  var $saveRequests = $('#saveRequests');
-  var $numRequests = 0;
+  var $users;
   var $requests;
 
-  function addToTable(){
+  function addToRequestTable(){
     var $addTable = "";
     for(var i = 0; i < $requests.length; i++){
 
        $addTable += '\
         <tr>\
-          <td><input type="checkbox" id="check'+i+'"></input></td>\
-          <td id="name'+i+'">'+$requests[i][0]+'</td>\
-          <td id="id'+i+'">'+$requests[i][1]+'</td>\
-          <td id="role'+i+'" >'+$requests[i][2]+'</td>\
+        <td><input type="checkbox" id="requestCheck'+i+'"></input></td>\
+          <td id="requestName'+i+'">'+$requests[i][0]+'</td>\
+          <td id="requestId'+i+'">'+$requests[i][1]+'</td>\
+          <td id="requestRole'+i+'" >'+$requests[i][2]+'</td>\
           <td id="requestedRole'+i+'" >'+$requests[i][3]+'</td>\
-          <td><input type="radio" name="action'+i+'" id="accept'+i+'" value="true" checked></input></td>\
-          <td><input type="radio" name="action'+i+'" id="deny'+i+'" value="false"></input></td>\
+          <td><input type="radio" name="requestAction'+i+'" id="accept'+i+'" value="true" checked></input></td>\
+          <td><input type="radio" name="requestAction'+i+'" id="deny'+i+'" value="false"></input></td>\
         </tr>'    
     }
-    $('#table tbody').append($addTable);
+    $('#tableRequests tbody').append($addTable);
+  }
+
+  function addToUserTable(){
+    var $addTable = "";
+    for(var i = 0; i < $users.length; i++){
+
+       $addTable += '\
+        <tr>\
+          <td><input type="checkbox" id="userCheck'+i+'"></input></td>\
+          <td id="userId'+i+'">'+$users[i][0]+'</td>\
+          <td id="userName'+i+'">'+$users[i][1]+'</td>\
+          <td>\
+            <select name="userRole'+i+'">\
+              <option value="1" '; if($users[i][2] == "1") $addTable += "selected";  $addTable += '>User</option>\
+              <option value="2" '; if($users[i][2] == "2") $addTable += "selected";  $addTable += '>Supporter</option>\
+              <option value="3" '; if($users[i][2] == "3") $addTable += "selected";  $addTable += '>Admin</option>\
+            </select>\
+          </td>\
+          <td><input type="checkbox" id="userDelete'+i+'"></input></td>\
+        </tr>'    
+    }
+    $('#tableUsers tbody').append($addTable);
   }
 
   $(document).ready(function(){
     getRequests();
+    getUsers();
   });
 
-  $saveRequests.click(function () {
+  $("#saveRequests").click(function () {
     var saveData = [];
     for(var i = 0; i < $requests.length; i++){
       var rowData = [];
-      if(document.getElementById("check"+i).checked){
-        rowData.push(document.getElementById("id"+i).innerText);
-        rowData.push(document.getElementById("role"+i).innerText);
+      if(document.getElementById("requestCheck"+i).checked){
+        rowData.push(document.getElementById("requestId"+i).innerText);
+        rowData.push(document.getElementById("requestRole"+i).innerText);
         rowData.push(document.getElementById("requestedRole"+i).innerText);
-        rowData.push($('input[name="action'+i+'"]:checked').val());
+        rowData.push($('input[name="requestAction'+i+'"]:checked').val());
       }
       if(rowData.length != 0)
         saveData.push(rowData);
@@ -246,6 +290,36 @@
         data: {"requests": saveData},
         success: function () {
           getRequests();
+          getUsers();
+        },
+      });
+    }
+
+  });
+
+  $("#saveUsers").click(function () {
+    var saveData = [];
+    for(var i = 0; i < $users.length; i++){
+      var rowData = [];
+      if(document.getElementById("userCheck"+i).checked){
+        rowData.push(document.getElementById("userId"+i).innerText);
+        rowData.push($('select[name=userRole'+i+']').val());
+        rowData.push(document.getElementById("userDelete"+i).checked);
+      }
+      if(rowData.length != 0)
+        saveData.push(rowData);
+    }
+    if(saveData.length == 0){
+      showToast("No tables selected");
+    } 
+    else{
+      $.ajax({ 
+        type: "post",
+        url: "processManageUsers.php",
+        data: {"users": saveData},
+        success: function () {
+          getRequests();
+          getUsers();
         },
       });
     }
@@ -260,8 +334,25 @@
       dataType: 'json',
       success: function (requests_) {
         $requests = requests_;
-        $("#table tbody").empty();
-        addToTable();
+        $("#tableRequests tbody").empty();
+        addToRequestTable();
+      },
+      error: function(xhr) {
+        alert("fail on requesting " + xhr);
+      }
+    });
+  }
+
+  function getUsers(){
+    $.ajax({ 
+      type: "post",
+      url: "getUsers.php",
+      data: {},
+      dataType: 'json',
+      success: function (users_) {
+        $users = users_;
+        $("#tableUsers tbody").empty();
+        addToUserTable();
       },
       error: function(xhr) {
         alert("fail on requesting " + xhr);
@@ -276,6 +367,7 @@
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
   }
+
 
 </script>
 

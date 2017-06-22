@@ -56,6 +56,7 @@
   include_once("getEventTypes.php");
   if(isset($_SESSION["userId"])){
     include_once("getNotifications.php");
+    include_once("getUserRole.php");
   }
 ?>
 
